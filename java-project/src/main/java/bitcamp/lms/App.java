@@ -17,15 +17,12 @@ public class App {
      System.out.printf("수업내용? ");
      String sb1 = kb.nextLine();
      
-     
      System.out.printf("시작일? ");
      String start = kb.nextLine();
     
-     
      System.out.printf("종료일? ");
      String end = kb.nextLine();
-
-     
+ 
      System.out.printf("총수업시간? ");
      int at = kb.nextInt();
      kb.nextLine();
@@ -33,6 +30,8 @@ public class App {
      System.out.printf("일수업시간? ");
      int dt = kb.nextInt();
      kb.nextLine();
+     
+     kb.close();
      
     System.out.printf(" 번호: %d\n 수업명: %s\n 수업내용: %s\n 기간: %s ~ %s\n 총수업시간: %d\n 일수업시간: %d\n",n,sb,sb1,start,end,at,dt);
     /* System.out.printf("번호: %d\n", n);

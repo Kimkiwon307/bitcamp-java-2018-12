@@ -15,6 +15,8 @@ public class App3 {
      System.out.print("내용? ");
      String m = kb.next();
      
+     kb.close();
+     
      System.out.printf("번호: %d\n내용: %s\n", n,m);
      System.out.printf("작성일: %1$tY-%1$tm-%1$td\n", today);
      System.out.print("조회수: 0");
