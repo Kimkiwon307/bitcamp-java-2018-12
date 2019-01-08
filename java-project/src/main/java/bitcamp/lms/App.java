@@ -5,43 +5,63 @@ package bitcamp.lms;
 
 public class App {
    public static void main(String[] args) {
- java.util.Scanner kb  = new java.util.Scanner(System.in);
-     
-     System.out.printf("번호? ");
-     int n = kb.nextInt();
-     kb.nextLine();
-    
-     System.out.printf("수업명? ");
-     String sb = kb.nextLine();
-     
-     System.out.printf("수업내용? ");
-     String sb1 = kb.nextLine();
-     
-     System.out.printf("시작일? ");
-     String start = kb.nextLine();
-    
-     System.out.printf("종료일? ");
-     String end = kb.nextLine();
- 
-     System.out.printf("총수업시간? ");
-     int at = kb.nextInt();
-     kb.nextLine();
-     
-     System.out.printf("일수업시간? ");
-     int dt = kb.nextInt();
-     kb.nextLine();
-     
-     kb.close();
-     
-    System.out.printf(" 번호: %d\n 수업명: %s\n 수업내용: %s\n 기간: %s ~ %s\n 총수업시간: %d\n 일수업시간: %d\n",n,sb,sb1,start,end,at,dt);
-    /* System.out.printf("번호: %d\n", n);
-     System.out.printf("수업명: %s\n", sb);
-     System.out.printf("수업내용: %s\n", sb1);
-     System.out.printf("시작일: %s\n", start);
-     System.out.printf("종료일: %s\n", end);
-     System.out.printf("총수업시간: %s 시간\n",at);
-     System.out.printf("일수업시간: %s 시간\n",dt);
-     */
-     
+java.util.Scanner kb = new java.util.Scanner(System.in);
+
+ int[] no = new int [100];
+ int[] total = new int [100];
+ int[] dlftlrks = new int[100];
+ String[] start = new String[100];
+ String[] end = new String[100];
+ String[] sodyd = new String[100];
+ String[] title = new String[100];
+ int a = 0 ;
+ String b  = " " ;
+ int c = 0 ;
+ okok:
+ while (true) {
+   System.out.print("번호? ");
+   no[a] =  kb.nextInt();
+   kb.nextLine();
+   
+   System.out.print("수업명? ");
+   title[a] =kb.nextLine();
+   
+   System.out.print("수업내용? ");
+   sodyd[a] =kb.nextLine();
+   
+   System.out.print("시작일? ");
+   start[a] =kb.nextLine();
+   
+   System.out.print("종료일? ");
+   end[a] =kb.nextLine();
+   
+   System.out.print("총수업시간? ");
+   total[a] =  kb.nextInt();
+   kb.nextLine();
+   
+   System.out.print("일수업시간? ");
+   dlftlrks[a] =  kb.nextInt();
+   kb.nextLine();
+   System.out.print("계속 입력하시겠습니까?(Y/n)");
+   
+   b = kb.next();
+   
+   if(b.equals("n")){
+     while (c <= a) {
+       System.out.printf("%d, %s , %s ~ %s, %d\n",no[c],title[c],start[c],end[c],total[c] );
+       c++;
+           if( c > a) {
+             kb.close();
+             break okok;
+           }
+     }
    }
+  
+   a++;
+ 
+ 
+ 
+     }
+   }
+
 }

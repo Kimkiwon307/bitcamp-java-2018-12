@@ -5,21 +5,38 @@ package bitcamp.lms;
 
 public class App3 {
    public static void main(String[] args) {
-     java.util.Scanner kb  = new java.util.Scanner(System.in);
-     java.util.Date today = new java.util.Date();
+     java.util.Scanner kb = new java.util.Scanner(System.in);
+     
+     int []no = new int[100];
+     String[]text = new String[100];
+     int inde = 0;
+     
+     String date = "2019-01-01";
+     String a = "0";
+     int i = 0;
+     
+     while(true) {
      
      System.out.print("번호? ");
-     int n = kb.nextInt();
+     no[inde] = kb.nextInt();
      kb.nextLine();
      
      System.out.print("내용? ");
-     String m = kb.next();
+     text[inde] = kb.nextLine();
      
-     kb.close();
+     System.out.print("계속 입력하시겠습니가?(y/n) ");
+     String d = kb.next();
      
-     System.out.printf("번호: %d\n내용: %s\n", n,m);
-     System.out.printf("작성일: %1$tY-%1$tm-%1$td\n", today);
-     System.out.print("조회수: 0");
+     if (!d.equalsIgnoreCase("y")){
+         while(i<=inde) {
+           System.out.printf("%d, %s,%s,%s\n",no[i],text[i],date,a);
+             i++;
+         }
+         break;
+     }
+     inde++;
+     
+     }
      
      
        

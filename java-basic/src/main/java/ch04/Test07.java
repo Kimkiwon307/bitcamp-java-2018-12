@@ -15,7 +15,7 @@ public class Test07{
         float r = f1 * f2 - 0.01f;
         System.out.println(((f1 * f2) - 0.01f) <= Float.POSITIVE_INFINITY);
         System.out.println((Math.abs(r)) <= Float.POSITIVE_INFINITY);
-        
+      
         
     }
 }

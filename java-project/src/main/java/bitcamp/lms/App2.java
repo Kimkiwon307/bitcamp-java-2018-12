@@ -5,36 +5,51 @@ package bitcamp.lms;
 
 public class App2 {
    public static void main(String[] args) {
-     java.util.Scanner kb  = new java.util.Scanner(System.in);
+     java.util.Scanner kb = new java.util.Scanner(System.in);
+     java.util.Date date = new java.util.Date();
      java.util.Date today = new java.util.Date();
+     int[]no = new int[100];
+     int[]ho = new int[100];
+     String[]name = new String[100];
+     String[]add = new String[100];
+     String[]pic = new String[100];
+     String[]bun = new String[100];
+     String d = " ";
+     int inde = 0 ;
+ 
+  while(true) {
+    
+      System.out.print("번호? ");
+      no[inde]= kb.nextInt();
+      kb.nextLine();
+    
+      System.out.print("이름? ");
+      name[inde]= kb.next();
+   
+      System.out.print("이메일? ");
+      add[inde]= kb.next();
      
-     System.out.print("번호? ");
-     int n = kb.nextInt();
-     kb.nextLine();
+      System.out.print("암호? ");
+      ho[inde]= kb.nextInt();
+      kb.nextLine();
+    
+      System.out.print("사진? ");
+      pic[inde]= kb.next();
      
-     System.out.print("이름? ");
-     String name = kb.next();
-     
-     System.out.print("이메일? ");
-     String mail = kb.next();
-     
-     System.out.print("암호? ");
-     int b = kb.nextInt();
-     kb.nextLine();
-     
-     
-     System.out.print("사진?");
-     String pt = kb.next();
-     
-     System.out.print("전화?");
-     String ph = kb.next();
-     
-     System.out.printf(" 번호:%d\n 이름:%s\n 이메일:%s\n 암호:%d\n "
-         + "사진:%s\n 전화:%s \n", n,name,mail,b,pt,ph);
-     System.out.printf("가입일: %1$tY-%1$tm-%1$td\n", today);
-     
-     
-     
-     
+      System.out.print("전화? ");
+      bun[inde]= kb.next();
+      
+      System.out.print("계속 입력하시겠습니까? (y/n)");
+      d = kb.next();
+      
+      if (!d.equals("Y") &&!d.equals("y") ) {
+        for(int i =0 ; i<=inde; i++) {
+        System.out.printf("%d, %s, %s, %s, 2019-01-01",no[i],name[i],add[i],bun[i]);
+        }    
+         kb.close(); 
+        break ;
+      }
+      inde++;
+    }
    }
 }
