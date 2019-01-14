@@ -1,53 +1,58 @@
 package com.eomcs.lms;
-import java.sql.Date;
+
+import java.util.Scanner;
+import com.eomcs.lms.handler.BoardHandler;
+import com.eomcs.lms.handler.LessonHandler;
+import com.eomcs.lms.handler.MemberHandler;
+
 public class App {
 
+  static Scanner keyboard = new Scanner(System.in);
+
   public static void main(String[] args) {
-    java.util.Scanner kb = new  java.util.Scanner(System.in);
 
-    int[]no =  new int[100];
-    String[]title = new String[100];
-    String[]content = new String[100];
-    Date[]start = new Date[100];
-    Date[]end = new Date[100];
-    int[]atime = new int[100];
-    int[]dtime = new int[100];
-    int i = 0;
+    LessonHandler.keyboard = keyboard;
+    BoardHandler.keyboard= keyboard;
+    MemberHandler.keyboard = keyboard;
 
-    while(i < 100) {
+    while (true) {
 
-      System.out.print("번호: ");
-      no[i] = Integer.parseInt(kb.nextLine());
+      String command = prompt();  
 
-      System.out.print("수업명: ");
-      title[i] = kb.nextLine();
+      if (command.equals("/lesson/add")) {
+        LessonHandler.addLesson();
 
-      System.out.print("수업내용: ");
-      content[i] = kb.nextLine();
+      } else if (command.equals("/lesson/list")) {
+        LessonHandler.listLesson();
 
-      System.out.print("시작일: ");
-      start[i] = Date.valueOf(kb.nextLine());
+      } else if (command.equals("/member/add")) {
+        MemberHandler.addMember();
 
-      System.out.print("종료일: ");
-      end[i] = Date.valueOf(kb.nextLine());
-
-      System.out.print("총수업시간: ");
-      atime[i] = Integer.parseInt(kb.nextLine());
-
-      System.out.print("일수업시간: ");
-      dtime[i] = Integer.parseInt(kb.nextLine());
-
-      System.out.print("게속 입력 하시껫습니가? (Y/n)");
-      String b = kb.nextLine();
-      System.out.println();
-      if (!b.equals("y") && !b.equals("Y") && !b.equals(" ")) {
-        break;
+      } else if (command.equals("/member/list")) {
+        MemberHandler.listMember();
       }
-      i++;
+      else if (command.equals("/board/add")) {
+        BoardHandler.addBoard();
+
+      } else if (command.equals("/board/list")) {
+        BoardHandler.listBoard();
+
+      } else if (command.equals("quit")) {
+        System.out.println("안녕!");
+        break;
+
+      } else {
+        System.out.println("실행할 수 없는 명령입니다.");
+      }
+
+      System.out.println(); // 결과 출력 후 빈 줄 출력
     }
-   for(int j=0; j <= i; j++) {
-    System.out.printf(" 번호: %d\n 수업명: %s\n 수업내용: %s\n "
-        + "기간: %s ~ %s\n 총수업시간: %d 시간 \n 일수업시간: %d 시간\n", no[j],title[j],content[j],start[j],end[j],atime[j],dtime[j]);
-   }
-   }
+
+    keyboard.close();
+  }
+
+  static String prompt() {
+    System.out.print("명령> ");
+    return keyboard.nextLine().toLowerCase();
+  }
 }
