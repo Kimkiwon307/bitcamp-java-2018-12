@@ -1,54 +1,69 @@
 package com.eomcs.lms;
+
+import java.sql.Date;
 import java.util.Scanner;
+import com.eomcs.lms.handler.BoardHandler;
+import com.eomcs.lms.handler.LessonHandler;
+import com.eomcs.lms.handler.MemberHandler;
+
 public class App {
+
+  static Scanner keyboard = new Scanner(System.in);
+  static final int LENGTH = 10;
+
   public static void main(String[] args) {
-    Scanner kb = new Scanner(System.in);
-    int leng = 10;
-    int index = 0;
 
-    int []no = new int[leng];
-    String []content = new String[leng];
-    String []title = new String[leng];
-    String []start = new String[leng];
-    String []end = new String[leng];
-    int []ttime = new int[leng];
-    int []dtime = new int[leng];
+    LessonHandler lh = new LessonHandler(keyboard);
+    BoardHandler bh = new BoardHandler(keyboard);
+    MemberHandler mh = new MemberHandler(keyboard);
 
-    while(true) {
-      System.out.print("번호? ");
-      no[index] = Integer.parseInt(kb.nextLine());
 
-      System.out.print("수업명? ");
-      title[index] = kb.nextLine();
+    while (true) {
+      String command = prompt();
 
-      System.out.print("수업내용? ");
-      content[index] = kb.nextLine();
+      if (command.equals("/lesson/add")) {
 
-      System.out.print("시작일? ");
-      start[index] = kb.nextLine();
+        lh.addLesson();
 
-      System.out.print("종료일?" );
-      end[index] = kb.nextLine();
+      } else if (command.equals("/lesson/list")) {
+        lh.listLesson();
 
-      System.out.print("총수업시간? ");
-      ttime[index] = Integer.parseInt(kb.nextLine());
+      } else if (command.equals("/member/add")) {
+        mh.addMember();
 
-      System.out.print("일수업시간? ");
-      dtime[index] = Integer.parseInt(kb.nextLine());
+      } else if (command.equals("/member/list")) {
+        mh.listMember();
 
-      index++;
-      
-      System.out.println("게속 입력하시겠습니까(Y/n)");
-      String answer = kb.nextLine();
-      if(!answer.equalsIgnoreCase("y") && !answer.equals(" ")) {
-        kb.close();
+      } else if (command.equals("/board/add")) {
+       bh.addBoard();
+
+      } else if (command.equals("/board/list")) {
+        bh.listBoard();
+
+      } else if (command.equals("quit")) {
+        System.out.println("안녕!");
         break;
+
+      } else {
+        System.out.println("실행할 수 없는 명령입니다.");
       }
+
+      System.out.println(); // 결과 출력 후 빈 줄 출력
     }
-    for(int j=0; j< index; j++) {  
-      System.out.printf("%d, %s,%s~%s,%d",no[j],
-          title[j],start[j],end[j],ttime[j]);
-      
-    }
+
+    keyboard.close();
   }
+
+  private static String prompt() {
+    System.out.print("명령> ");
+    return keyboard.nextLine().toLowerCase();
+  }
+
+
+
+
+
+
+
+
 }
