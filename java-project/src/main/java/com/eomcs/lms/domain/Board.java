@@ -1,12 +1,12 @@
 package com.eomcs.lms.domain;
-
 import java.sql.Date;
 
 public class Board {
-  private  int no;
-  private  String contents;
+  private int no;
+  private String contents;
   private Date createdDate;
-  private  int viewCount;
+  private int viewCount;
+  
   public int getNo() {
     return no;
   }
@@ -31,5 +31,6 @@ public class Board {
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
   }
+  
   
 }

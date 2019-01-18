@@ -1,19 +1,28 @@
 package com.eomcs.lms.handler;
-
 import java.sql.Date;
 import java.util.Scanner;
 import com.eomcs.lms.domain.Member;
+
 public class MemberHandler {
- 
-  public static Scanner keyboard;
   
-  static final int LENGTH = 10;
-  Member[] members = new Member[LENGTH];
-  int memberIdx = 0;
+  Scanner keyboard;
+  ArrayList<Member> list;
+  
   public MemberHandler(Scanner keyboard) {
     this.keyboard = keyboard;
+    this.list = new ArrayList<>();
   }
   
+  public void listMember() {
+    Member[] members = list.toArray(new Member[0]);
+    
+    for (Member member : members) {
+      System.out.printf("%3d, %-4s, %-20s, %-15s, %s\n", 
+          member.getNo(), member.getName(), 
+          member.getEmail(), member.getTel(), member.getRegisteredDate());
+    }
+  }
+
   public void addMember() {
     Member member = new Member();
     
@@ -21,13 +30,13 @@ public class MemberHandler {
     member.setNo(Integer.parseInt(keyboard.nextLine()));
     
     System.out.print("이름? ");
-    member.setName(keyboard.nextLine()); 
+    member.setName(keyboard.nextLine());
     
     System.out.print("이메일? ");
-    member.setEmail(keyboard.nextLine()); 
+    member.setEmail(keyboard.nextLine());
     
     System.out.print("암호? ");
-    member.setPassword(keyboard.nextLine()) ;
+    member.setPassword(keyboard.nextLine());
   
     System.out.print("사진? ");
     member.setPhoto(keyboard.nextLine());
@@ -37,19 +46,16 @@ public class MemberHandler {
   
     member.setRegisteredDate(new Date(System.currentTimeMillis())); 
     
-    members[memberIdx] = member;
-    memberIdx++;
+    list.add(member);
     
     System.out.println("저장하였습니다.");
   }
 
-  public void listMember() {
-    for (int j = 0; j < memberIdx; j++) {
-      System.out.printf("%3d, %-4s, %-20s, %-15s, %s\n", 
-          members[j].getNo(), members[j].getName(), members[j].getEmail(), 
-          members[j].getTel(), members[j].getRegisteredDate());
-    }
-  }
-
-
 }
+
+
+
+
+
+
+
