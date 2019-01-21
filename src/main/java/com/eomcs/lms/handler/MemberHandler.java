@@ -1,37 +1,34 @@
 package com.eomcs.lms.handler;
-
 import java.sql.Date;
 import java.util.Scanner;
 import com.eomcs.lms.domain.Member;
+import com.eomcs.util.ArrayList;
 
 public class MemberHandler {
-
+  
   Scanner keyboard;
-  ArrayList al;
-
+  ArrayList<Member> list;
+  
   public MemberHandler(Scanner keyboard) {
     this.keyboard = keyboard;
-     al = new ArrayList();
+    this.list = new ArrayList<>(20);
   }
-
+  
   public void listMember() {
-      
-  Object[] objs = al.toArray();
-   
-    for (Object obj : objs ) {
-          Member member = (Member)obj;
-      System.out.printf("%3d, %-4s, %-20s, %-15s, %s\n",
-         member.getNo(), member.getName(), member.getEmail(),
-         member.getTel(), member.getRegisteredDate());
+    Member[] members = list.toArray(new Member[] {});
+    for (Member member : members) {
+      System.out.printf("%3d, %-4s, %-20s, %-15s, %s\n", 
+          member.getNo(), member.getName(), 
+          member.getEmail(), member.getTel(), member.getRegisteredDate());
     }
   }
 
   public void addMember() {
     Member member = new Member();
-
+    
     System.out.print("번호? ");
-    member.setNo(Integer.parseInt(this.keyboard.nextLine())); 
-
+    member.setNo(Integer.parseInt(keyboard.nextLine()));
+    
     System.out.print("이름? ");
     member.setName(keyboard.nextLine());
     
@@ -39,17 +36,17 @@ public class MemberHandler {
     member.setEmail(keyboard.nextLine());
     
     System.out.print("암호? ");
-    member.setPassword(this.keyboard.nextLine());
-
+    member.setPassword(keyboard.nextLine());
+  
     System.out.print("사진? ");
     member.setPhoto(keyboard.nextLine());
-
+  
     System.out.print("전화? ");
     member.setTel(keyboard.nextLine());
-
+  
     member.setRegisteredDate(new Date(System.currentTimeMillis())); 
-
-    al.add(member); 
+    
+    list.add(member);
     
     System.out.println("저장하였습니다.");
   }

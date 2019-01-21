@@ -1,5 +1,4 @@
 package com.eomcs.lms.domain;
-
 import java.sql.Date;
 
 public class Board {
@@ -7,6 +6,7 @@ public class Board {
   private String contents;
   private Date createdDate;
   private int viewCount;
+  
   public int getNo() {
     return no;
   }
@@ -31,5 +31,6 @@ public class Board {
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
   }
+  
   
 }

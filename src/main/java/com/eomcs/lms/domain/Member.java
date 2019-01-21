@@ -1,5 +1,4 @@
 package com.eomcs.lms.domain;
-
 import java.sql.Date;
 
 public class Member {
@@ -10,6 +9,7 @@ public class Member {
   private String photo;
   private String tel;
   private Date registeredDate;
+  
   public int getNo() {
     return no;
   }
@@ -52,5 +52,6 @@ public class Member {
   public void setRegisteredDate(Date registeredDate) {
     this.registeredDate = registeredDate;
   }
+  
   
 }

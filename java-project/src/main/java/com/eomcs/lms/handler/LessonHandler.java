@@ -5,21 +5,20 @@ import java.util.Scanner;
 import com.eomcs.lms.domain.Lesson;
 
 public class LessonHandler {
-
   Scanner keyboard;
-  ArrayList<Lesson> list;
-  
+  ArrayList al ;
   public LessonHandler(Scanner keyboard) {
     this.keyboard = keyboard;
-    list = new ArrayList<>(new Lesson[] {});
+    al = new ArrayList();
   }
-  
+
   public void listLesson() {
-    Lesson[] lessons = list.toArray();
-    for (Lesson lesson : lessons) {
-      System.out.printf("%3d, %-15s, %10s ~ %10s, %4d\n", 
-          lesson.getNo(), lesson.getTitle(), 
-          lesson.getStartDate(), lesson.getEndDate(), lesson.getTotalHours());
+    Object[] objs = al.toArray();
+    for (Object obj : objs) {
+        Lesson lesson = (Lesson) obj;
+      System.out.printf("%3d, %-15s, %10s ~ %10s, %4d\n",
+          lesson.getNo(), lesson.getTitle(), lesson.getStartDate(),
+          lesson.getEndDate(), lesson.getTotalHours());
     }
   }
 
@@ -27,27 +26,28 @@ public class LessonHandler {
     Lesson lesson = new Lesson();
 
     System.out.print("번호? ");
-    lesson.setNo(Integer.parseInt(keyboard.nextLine()));
+    lesson.setNo(Integer.parseInt(this.keyboard.nextLine()));
 
     System.out.print("수업명? ");
     lesson.setTitle(keyboard.nextLine());
 
     System.out.print("설명? ");
-    lesson.setContents(keyboard.nextLine());
+    lesson.setContents(keyboard.nextLine()); 
 
     System.out.print("시작일? ");
-    lesson.setStartDate(Date.valueOf(keyboard.nextLine()));
+    lesson.setStartDate(Date.valueOf(this.keyboard.nextLine()));
 
     System.out.print("종료일? ");
-    lesson.setEndDate(Date.valueOf(keyboard.nextLine()));
+    lesson.setEndDate(Date.valueOf(this.keyboard.nextLine()));  
 
     System.out.print("총수업시간? ");
-    lesson.setTotalHours(Integer.parseInt(keyboard.nextLine()));
+    lesson.setTotalHours(Integer.parseInt(this.keyboard.nextLine()));  
 
     System.out.print("일수업시간? ");
-    lesson.setDayHours(Integer.parseInt(keyboard.nextLine()));
+    lesson.setDayHours(Integer.parseInt(this.keyboard.nextLine()));
 
-    list.add(lesson);
+    // i 번째 배열에 수업 정보를 담고 있는 Lesson 객체(의 주소)를 보관한다.
+      al.add(lesson);
 
     System.out.println("저장하였습니다.");
   }
