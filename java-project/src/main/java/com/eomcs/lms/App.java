@@ -1,10 +1,16 @@
 package com.eomcs.lms;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 import com.eomcs.lms.handler.BoardHandler;
 import com.eomcs.lms.handler.LessonHandler;
 import com.eomcs.lms.handler.MemberHandler;
-import com.eomcs.util.Stack;
+
 
 public class App {
 
@@ -12,19 +18,26 @@ public class App {
 
   // 사용자가 입력한 명령을 보관할 스택 준비
   static Stack<String> commandHistory = new Stack<>();
+  static ArrayDeque<String> commandHistory2 = new ArrayDeque<>();
 
   public static void main(String[] args) {
 
-    LessonHandler lessonHandler = new LessonHandler(keyboard);
-    MemberHandler memberHandler = new MemberHandler(keyboard);
-    BoardHandler boardHandler1 = new BoardHandler(keyboard);
-    BoardHandler boardHandler2 = new BoardHandler(keyboard);
+    // 핸들러가 필요로 하는 의존 객체를 이 클래스에서 만들어 주입해 준다.
+    // => "의존 객체 주입(Dependency Injection; DI)"이라 한다.
+    //
+    LessonHandler lessonHandler = new LessonHandler(keyboard, new ArrayList<>());
+    MemberHandler memberHandler = new MemberHandler(keyboard, new ArrayList<>());
+    BoardHandler boardHandler1 = new BoardHandler(keyboard, new LinkedList<>());
+    BoardHandler boardHandler2 = new BoardHandler(keyboard, new LinkedList<>());
 
     while (true) {
       String command = prompt();
 
       // 사용자가 입력한 명령을 스택에 보관한다.
       commandHistory.push(command);
+
+      // 사용자가 입력한 명령을 큐에 보관한다.
+      commandHistory2.offer(command);
 
       if (command.equals("/lesson/add")) {
         lessonHandler.addLesson();
@@ -91,25 +104,43 @@ public class App {
         break;
 
       } else if (command.equals("history")) {
-        printCommandHistory();
+        printCommandHistory(new Iterator<String>() {
+          int index = commandHistory.size()-1;
 
+          @Override
+          public boolean hasNext() {
+            return index >= 0 ;          
+          }
+
+          @Override
+          public String next() {
+            return commandHistory.get(index--);
+          }
+
+        });
+
+      } else if (command.equals("history2")) {
+        printCommandHistory(commandHistory2.iterator());
       } else {
         System.out.println("실행할 수 없는 명령입니다.");
       }
-
       System.out.println(); // 결과 출력 후 빈 줄 출력
     }
-
     keyboard.close();
   }
-
-  private static void printCommandHistory() {
+  private static void printCommandHistory(Iterator<String> iterator) {
     try {
-      Stack<String>temp = commandHistory.clone();
-      while (!temp.empty()) {
-        System.out.println(temp.pop());
+      int count = 0;
+      while (iterator.hasNext()) {
+        System.out.println(iterator.next());
+        if (++count % 5 == 0) {
+          System.out.print(":");
+          String input = keyboard.nextLine();
+          if (input.equalsIgnoreCase("q"))
+            break;
+        }
       }
-    }catch(Exception e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
