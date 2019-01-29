@@ -59,14 +59,13 @@ public class Test01 {
     
     System.out.println("```````````````````````````````````````````");
     // 입력한 값의 타입으로 배열을 받고 싶다면?
-    // => 파라미터로 넘겨 준 배열이 값으 ㄹ담을 만큼 충분히 크다면 새배열을 리턴하지 안흔다.
-    String[]  values3 = new String[set.size()];
-    String[]  values4 = set.toArray(values3);
+//    // => 파라미터로 넘겨 준 배열이 값으 ㄹ담을 만큼 충분히 크다면 새배열을 리턴하지 안흔다.
+   String[]  values3 = new String[set.size()];
+   String[]  values4 = set.toArray(values3);
     System.out.println(values3 == values4);//true
         for(String value : values2) {
       System.out.println(value);
-    }
-
+        }
 
 
 
