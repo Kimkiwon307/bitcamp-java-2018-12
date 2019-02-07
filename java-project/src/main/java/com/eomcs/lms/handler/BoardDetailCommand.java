@@ -1,22 +1,19 @@
 package com.eomcs.lms.handler;
-import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 import com.eomcs.lms.domain.Board;
 
-public class BoardDetailCommand implements Command{
-   
+public class BoardDetailCommand implements Command {
+  
   Scanner keyboard;
   List<Board> list;
   
   public BoardDetailCommand(Scanner keyboard, List<Board> list) {
     this.keyboard = keyboard;
-   
-    this.list = list; 
+    this.list = list;
   }
-  
-  
 
+  @Override
   public void execute() {
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
@@ -32,9 +29,6 @@ public class BoardDetailCommand implements Command{
     System.out.printf("내용: %s\n", board.getContents());
     System.out.printf("작성일: %s\n", board.getCreatedDate());
   }
-  
-  
-
   
   private int indexOfBoard(int no) {
     for (int i = 0; i < list.size(); i++) {

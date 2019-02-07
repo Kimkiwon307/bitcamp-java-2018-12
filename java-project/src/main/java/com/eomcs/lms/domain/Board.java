@@ -1,12 +1,15 @@
 package com.eomcs.lms.domain;
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Board implements Cloneable {
+public class Board implements Cloneable, Serializable {
+  private static final long serialVersionUID = 1L;
+  
   private int no;
   private String contents;
   private Date createdDate;
   private int viewCount;
-   
+  
   @Override
   public Board clone() throws CloneNotSupportedException {
     return (Board) super.clone();
@@ -35,23 +38,6 @@ public class Board implements Cloneable {
   }
   public void setViewCount(int viewCount) {
     this.viewCount = viewCount;
-  }
-  public static Board valueOf(String csv) {
-    /**
-     *@param csv "번호, 제목, 내용, 시작일(yyyy-MM-dd),종료일(yyyy-MM-dd),총강의시간,일강의시간" 
-     @return
-     */
-     
-    String[] values = csv.split(",");
-    
-    Board board = new Board();
-    board.setNo(Integer.parseInt(values[0]));
-    board.setContents(values[1]);
-    board.setCreatedDate(Date.valueOf(values[2]));
-    board.setViewCount(Integer.parseInt(values[3]));
-   
-
-    return board;
   }
   
   

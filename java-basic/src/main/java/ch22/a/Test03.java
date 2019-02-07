@@ -8,7 +8,7 @@ public class Test03 {
   public static void main(String[] args) throws Exception {
 
     // 생성할 디렉토리 정보를 준비한다.
-    File dir = new File("temp2");
+    File dir = new File("temp");
     if(dir.mkdir()) {
       System.out.println("디렉토리 생성됨.");
     }else {

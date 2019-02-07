@@ -4,20 +4,17 @@ import java.util.List;
 import java.util.Scanner;
 import com.eomcs.lms.domain.Member;
 
-public class MemberAddCommand implements Command{
+public class MemberAddCommand implements Command {
   
   Scanner keyboard;
   List<Member> list;
   
   public MemberAddCommand(Scanner keyboard, List<Member> list) {
     this.keyboard = keyboard;
-    
-   
-    this.list = list; // 파라미터로 주입된 의존 객체를 저장한다.
+    this.list = list;
   }
   
- 
-
+  @Override
   public void execute() {
     Member member = new Member();
     
@@ -44,16 +41,5 @@ public class MemberAddCommand implements Command{
     list.add(member);
     
     System.out.println("저장하였습니다.");
-  }
-
- 
-  
-  private int indexOfMember(int no) {
-    for (int i = 0; i < list.size(); i++) {
-      Member m = list.get(i);
-      if (m.getNo() == no)
-        return i;
-    }
-    return -1;
   }
 }

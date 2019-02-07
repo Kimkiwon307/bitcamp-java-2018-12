@@ -1,9 +1,10 @@
 package com.eomcs.lms.domain;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Date;
 
-public class Lesson implements Cloneable {
+public class Lesson implements Cloneable, Serializable {
+  private static final long serialVersionUID = 1L;
+  
   private int no;
   private String title;
   private String contents;
@@ -11,12 +12,12 @@ public class Lesson implements Cloneable {
   private Date endDate;
   private int totalHours;
   private int dayHours;
-
+  
   @Override
   public Lesson clone() throws CloneNotSupportedException {
     return (Lesson) super.clone();
   }
-
+  
   public int getNo() {
     return no;
   }
@@ -59,25 +60,6 @@ public class Lesson implements Cloneable {
   public void setDayHours(int dayHours) {
     this.dayHours = dayHours;
   }
-  public static Lesson valueOf(String csv) {
-    /**
-     *@param csv "번호, 제목, 내용, 시작일(yyyy-MM-dd),종료일(yyyy-MM-dd),총강의시간,일강의시간" 
-     @return
-     */
-     
-    String[] values = csv.split(",");
-    
-    Lesson lesson = new Lesson();
-    lesson.setNo(Integer.parseInt(values[0]));
-    lesson.setTitle(values[1]);
-    lesson.setContents(values[2]);
-    lesson.setStartDate(Date.valueOf(values[3]));
-    lesson.setEndDate(Date.valueOf(values[4]));
-    lesson.setTotalHours(Integer.parseInt(values[5]));
-    lesson.setDayHours(Integer.parseInt(values[6]));
-
-    return lesson;
-  }
-
-
+  
+  
 }

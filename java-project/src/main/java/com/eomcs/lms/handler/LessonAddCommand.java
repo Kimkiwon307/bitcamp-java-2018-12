@@ -4,19 +4,17 @@ import java.util.List;
 import java.util.Scanner;
 import com.eomcs.lms.domain.Lesson;
 
-public class LessonAddCommand implements Command{
+public class LessonAddCommand implements Command {
 
   Scanner keyboard;
   List<Lesson> list;
 
   public LessonAddCommand(Scanner keyboard, List<Lesson> list) {
     this.keyboard = keyboard;
-    
-  
-    this.list = list; // 파라미터로 주입된 의존 객체를 저장한다.
+    this.list = list;
   }
 
-
+  @Override
   public void execute() {
     Lesson lesson = new Lesson();
 
@@ -46,13 +44,4 @@ public class LessonAddCommand implements Command{
     System.out.println("저장하였습니다.");
   }
   
- 
-  private int indexOfLesson(int no) {
-    for (int i = 0; i < list.size(); i++) {
-      Lesson l = list.get(i);
-      if (l.getNo() == no)
-        return i;
-    }
-    return -1;
-  }
 }

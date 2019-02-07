@@ -1,23 +1,19 @@
 package com.eomcs.lms.handler;
-import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 import com.eomcs.lms.domain.Board;
 
-public class BoardDeleteCommand implements Command{
-   
+public class BoardDeleteCommand implements Command {
+  
   Scanner keyboard;
   List<Board> list;
   
   public BoardDeleteCommand(Scanner keyboard, List<Board> list) {
     this.keyboard = keyboard;
-    
-    
-  
-    this.list = list; 
+    this.list = list;
   }
-  
-  
+
+  @Override
   public void execute() {
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
