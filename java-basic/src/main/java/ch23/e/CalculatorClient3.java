@@ -13,9 +13,13 @@ Stateless는 응답을 받은 후에 연결을 끊는다.
 서버쪽에서는 어떻게 클라이언트를 구분하여 작업 결과를 유지할 것인가? 
  */
 public class CalculatorClient3 {
+  
   public static void main(String[] args) {
     
     Scanner keyboard = new Scanner(System.in);
+    
+    // 서버에서 클라이언트를 구분할 때 사용할 값
+    long sessionID = 0;
     
     while (true) {
       // 계산 요청을 할 때 연산자와 값만 넘긴다.
@@ -34,9 +38,17 @@ public class CalculatorClient3 {
         
         System.out.println("서버와 연결됨! 서버에게 계산 작업을 요청함!");
         
+        // 서버에 먼저 세션 ID를 보낸다
+        out.println(sessionID);
         out.println(input);
         out.flush();
         
+        if(sessionID == 0) {
+            // 서버에 보낸 세션 아이디가 0이면 서버는 새로 세션 아이디를 발급하여 보내줄 것이다.
+          //    받아야한다.
+            sessionID = Long.parseLong(in.readLine());
+            System.out.printf("발급받은 세션아이디 %d\n",sessionID);
+        }
         String response = in.readLine();
         System.out.println(response);
 

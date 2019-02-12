@@ -18,6 +18,7 @@ public class CalculatorServer {
       int result = 0;
       //
       while (true) {
+        
         try (Socket socket = serverSocket.accept();
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()));
