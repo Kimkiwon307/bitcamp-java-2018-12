@@ -13,6 +13,18 @@ public class Member implements Cloneable, Serializable {
   private String tel;
   private Date registeredDate;
   
+  public Member() {
+  }
+  
+  public Member(int no, String name) {
+    this.no = no;
+    this.name = name;
+  }
+  
+  @Override
+  public Member clone() throws CloneNotSupportedException {
+    return (Member) super.clone();
+  }
   
   @Override
   public String toString() {
@@ -20,11 +32,6 @@ public class Member implements Cloneable, Serializable {
         + ", photo=" + photo + ", tel=" + tel + ", registeredDate=" + registeredDate + "]";
   }
 
-  @Override
-  public Member clone() throws CloneNotSupportedException {
-    return (Member) super.clone();
-  }
-  
   public int getNo() {
     return no;
   }

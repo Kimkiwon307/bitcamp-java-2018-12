@@ -1,40 +1,37 @@
 package com.eomcs.lms.handler;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Scanner;
+import com.eomcs.lms.Agent.BoardAgent;
 import com.eomcs.lms.domain.Board;
 
 public class BoardDeleteCommand implements Command {
-  
+
   Scanner keyboard;
-  List<Board> list;
-  
-  public BoardDeleteCommand(Scanner keyboard, List<Board> list) {
+  BoardAgent boardAgent;
+
+  public BoardDeleteCommand(Scanner keyboard, BoardAgent boardAgent) {
     this.keyboard = keyboard;
-    this.list = list;
+    this.boardAgent = boardAgent;
   }
 
   @Override
   public void execute() {
+
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
-
-    int index = indexOfBoard(no);
-    if (index == -1) {
-      System.out.println("해당 게시글을 찾을 수 없습니다.");
-      return;
+   
+    try {
+      boardAgent.delete(no);
+      System.out.println("삭제했습니다");
+      
+    }catch(Exception e) {
+      System.out.printf("게시글 삭제 오류!:%s \n",e.getMessage());
     }
-    
-    list.remove(index);
-    
-    System.out.println("게시글을 삭제했습니다.");
   }
   
-  private int indexOfBoard(int no) {
-    for (int i = 0; i < list.size(); i++) {
-      Board b = list.get(i);
-      if (b.getNo() == no)
-        return i;
-    }
-    return -1;
-  }
+  
+
+
 }

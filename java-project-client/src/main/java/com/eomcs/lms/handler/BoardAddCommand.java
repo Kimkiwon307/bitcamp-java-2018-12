@@ -1,22 +1,24 @@
 package com.eomcs.lms.handler;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Date;
-import java.util.List;
 import java.util.Scanner;
+import com.eomcs.lms.Agent.BoardAgent;
 import com.eomcs.lms.domain.Board;
 
 public class BoardAddCommand implements Command {
-  
+
   Scanner keyboard;
-  List<Board> list;
-  
-  public BoardAddCommand(Scanner keyboard, List<Board> list) {
+  BoardAgent boardAgent;
+
+  public BoardAddCommand(Scanner keyboard, BoardAgent boardAgent) {
     this.keyboard = keyboard;
-    this.list = list;
+    this.boardAgent = boardAgent;
   }
-  
+
   @Override
   public void execute() {
-    Board board = new Board();
+ Board board = new Board();
     
     System.out.print("번호? ");
     board.setNo(Integer.parseInt(keyboard.nextLine()));
@@ -28,8 +30,13 @@ public class BoardAddCommand implements Command {
     
     board.setViewCount(0);
     
-    list.add(board);
-    
-    System.out.println("저장하였습니다.");
+    try {
+      boardAgent.add(board);
+      System.out.println("저장하였습니다.");
+      
+    } catch (Exception e) {
+      System.out.printf("실행 오류! : %s\n", e.getMessage());
+    }
   }
 }
+

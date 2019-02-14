@@ -1,42 +1,44 @@
+// 8단계: 서버 실행 테스트
 package com.eomcs.lms;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import com.eomcs.lms.domain.Member;
 
 public class ServerTest {
-  public static void main(String []args) {
 
-    try(
-        Socket socket = new Socket("localhost",8888);
+  static ObjectOutputStream out;
+  static ObjectInputStream in;
+  
+  public static void main(String[] args) {
+    
+    try (Socket socket = new Socket("localhost", 8888);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-
-
-        ){
-
-      System.out.println("서버와 연결되었음");
-
-      Member member = new Member();
-      member.setNo(1);
-      member.setName("홍길동");
-      member.setEmail("hong@test.com");
-      member.setPassword("111");
-      member.setPhoto("hong.gif");
-      member.setTel("11111-1111");
-
-      //member 객체를 서버로 시리얼라이즈하라
-      out.writeObject(member);
-      out.flush();
-      //또한 
-      Member request = (Member)in.readObject();
-      System.out.println("객체받음");
-
-      System.out.println("서버와 연결끊었음");
-
-    }catch(Exception e) {
-
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream())) {
+      
+      System.out.println("서버와 연결되었음.");
+      ServerTest.in = in;
+      ServerTest.out = out;
+      
+      new MemberTest(out, in).test();
+      System.out.println("----------------------------");
+      
+      new LessonTest(out, in).test();
+      System.out.println("----------------------------");
+      
+      new BoardTest(out, in).test();
+      System.out.println("----------------------------");
+      
+      quit();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    System.out.println("서버와의 연결을 끊었음.");
+  }
+  
+  static void quit() throws Exception {
+    out.writeUTF("quit"); out.flush();
+    System.out.println(in.readUTF());
   }
 }
