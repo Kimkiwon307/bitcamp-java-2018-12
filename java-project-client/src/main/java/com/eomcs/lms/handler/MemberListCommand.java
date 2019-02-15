@@ -12,16 +12,17 @@ import com.eomcs.lms.domain.Member;
 public class MemberListCommand implements Command {
   
   Scanner keyboard;
-  
-  public MemberListCommand(Scanner keyboard) {
+  MemberAgent memberAgent;
+  public MemberListCommand(Scanner keyboard, MemberAgent memberAgent) {
     this.keyboard = keyboard;
+    this.memberAgent = memberAgent;
   }
   
   @Override
-  public void execute(ObjectInputStream in, ObjectOutputStream out) {
+  public void execute() {
     try {
     
-      List<Member> members =MemberAgent.list(in, out);
+      List<Member> members =memberAgent.list();
     
       for (Member member : members) {
         System.out.printf("%3d, %-20s\n", 

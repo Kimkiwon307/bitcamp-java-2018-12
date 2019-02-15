@@ -12,17 +12,18 @@ import com.eomcs.lms.domain.Member;
 public class MemberDetailCommand implements Command {
   
   Scanner keyboard;
-  
-  public MemberDetailCommand(Scanner keyboard) {
+  MemberAgent memberAgent;
+  public MemberDetailCommand(Scanner keyboard, MemberAgent memberAgent) {
     this.keyboard = keyboard;
+    this.memberAgent = memberAgent;
   }
   
   @Override
-  public void execute(ObjectInputStream in, ObjectOutputStream out) {
+  public void execute() {
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
     try {
-      Member member =  MemberAgent.get(no, in, out);
+      Member member =  memberAgent.get(no);
       System.out.printf("이름: %s\n", member.getName());
       System.out.printf("비번: %s\n", member.getPassword());
 

@@ -10,18 +10,19 @@ import com.eomcs.lms.domain.Lesson;
 public class LessonDetailCommand implements Command {
 
   Scanner keyboard;
-
-  public LessonDetailCommand(Scanner keyboard) {
+  LessonAgent lessonAgent;
+  public LessonDetailCommand(Scanner keyboard, LessonAgent lessonAgent) {
     this.keyboard = keyboard;
+    this.lessonAgent =  lessonAgent;
   }
 
   @Override
-  public void execute(ObjectInputStream in, ObjectOutputStream out) {
+  public void execute() {
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
     try {
         
-      Lesson lesson =  LessonAgent.get(no, in, out);
+      Lesson lesson =  lessonAgent.get(no);
       System.out.printf("내용: %s\n", lesson.getContents());
       System.out.printf("시작날짜: %s\n", lesson.getDayHours());
       System.out.printf("종료날짜: %s\n", lesson.getEndDate());

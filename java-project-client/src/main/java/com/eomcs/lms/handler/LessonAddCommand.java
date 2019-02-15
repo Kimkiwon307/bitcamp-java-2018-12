@@ -4,15 +4,18 @@ import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
+import com.eomcs.lms.Agent.BoardAgent;
 import com.eomcs.lms.Agent.LessonAgent;
 import com.eomcs.lms.domain.Lesson;
 
 public class LessonAddCommand implements Command {
 
   Scanner keyboard;
-
-  public LessonAddCommand(Scanner keyboard) {
+  LessonAgent lessonAgent;
+ 
+  public LessonAddCommand(Scanner keyboard, LessonAgent lessonAgent) {
     this.keyboard = keyboard;
+    this.lessonAgent = lessonAgent;
   }
 
   @Override
@@ -41,8 +44,8 @@ public class LessonAddCommand implements Command {
     lesson.setDayHours(Integer.parseInt(keyboard.nextLine()));
 
     try { 
-      
-      LessonAgent.add(lesson, in, out);
+
+      lessonAgent.add(lesson);
       System.out.println("저장하였습니다.");
 
     }catch(Exception e) {
@@ -50,5 +53,5 @@ public class LessonAddCommand implements Command {
       System.out.printf("게시글 저장 오류!:%s \n",e.getMessage());
     }
   }
-  
+
 }

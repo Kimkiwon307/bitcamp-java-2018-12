@@ -1,4 +1,3 @@
-// 11단계: AbstractService 상속 받기
 package com.eomcs.lms.service;
 
 import java.io.ObjectInputStream;
@@ -7,28 +6,30 @@ import com.eomcs.lms.dao.MemberDao;
 import com.eomcs.lms.domain.Member;
 
 public class MemberService implements Service {
-MemberDao memberDao;
 
-public MemberService(MemberDao memberDao) {
-  this.memberDao = memberDao;
-}
+  MemberDao memberDao;
+  
+  public MemberService(MemberDao memberDao) {
+    this.memberDao = memberDao;
+  }
+  
   public void execute(String request, ObjectInputStream in, ObjectOutputStream out) throws Exception {
 
     switch (request) {
       case "/member/add":
-        add(in,out);
+        add(in, out);
         break;
       case "/member/list":
-        list(in,out);
+        list(in, out);
         break;
       case "/member/detail":
-        detail(in,out);
+        detail(in, out);
         break;
       case "/member/update":
-        update(in,out);
+        update(in, out);
         break;
       case "/member/delete":
-        delete(in,out);
+        delete(in, out);
         break;  
       default:
         out.writeUTF("FAIL");
@@ -47,7 +48,6 @@ public MemberService(MemberDao memberDao) {
     out.writeUTF("OK");
     out.flush();
     out.writeUTF("OK");
-    //out.writeObject(list);
     out.writeUnshared(memberDao.findAll());
   }
 
@@ -56,21 +56,20 @@ public MemberService(MemberDao memberDao) {
     out.flush();
     int no = in.readInt();
 
-    Member b = memberDao.findByNo(no);
-    if (b == null) { 
+    Member obj = memberDao.findByNo(no);
+    if (obj == null) { 
       out.writeUTF("FAIL");
       return;
     }
 
     out.writeUTF("OK");
-    out.writeObject(b);
+    out.writeObject(obj);
   }
 
   private void update(ObjectInputStream in, ObjectOutputStream out) throws Exception {
     out.writeUTF("OK");
     out.flush();
     Member member = (Member) in.readObject();
-
 
     if (memberDao.update(member) == 0) {
       out.writeUTF("FAIL");
@@ -79,7 +78,6 @@ public MemberService(MemberDao memberDao) {
     
     out.writeUTF("OK");
   }
-
 
   private void delete(ObjectInputStream in, ObjectOutputStream out) throws Exception {
     out.writeUTF("OK");

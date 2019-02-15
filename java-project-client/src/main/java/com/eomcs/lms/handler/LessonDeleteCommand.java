@@ -3,15 +3,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 import java.util.Scanner;
+import com.eomcs.lms.Agent.BoardAgent;
 import com.eomcs.lms.Agent.LessonAgent;
+import com.eomcs.lms.Agent.MemberAgent;
 import com.eomcs.lms.domain.Lesson;
 
 public class LessonDeleteCommand implements Command {
 
   Scanner keyboard;
-
-  public LessonDeleteCommand(Scanner keyboard) {
+  LessonAgent lessonAgent;
+  
+  public LessonDeleteCommand(Scanner keyboard, LessonAgent lessonAgent) {
     this.keyboard = keyboard;
+    this.lessonAgent = lessonAgent;
   }
 
   @Override
@@ -20,7 +24,7 @@ public class LessonDeleteCommand implements Command {
     int no = Integer.parseInt(keyboard.nextLine());
 
     try {
-      LessonAgent.delete(no, in, out);
+      lessonAgent.delete(no);
       System.out.println("데이터 삭제 실패!");
 
     }catch(Exception e) {

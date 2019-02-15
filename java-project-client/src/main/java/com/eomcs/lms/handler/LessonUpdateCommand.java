@@ -12,19 +12,19 @@ import com.eomcs.lms.domain.Lesson;
 public class LessonUpdateCommand implements Command {
 
   Scanner keyboard;
-
-  public LessonUpdateCommand(Scanner keyboard) {
+  LessonAgent lessonAgent;
+  public LessonUpdateCommand(Scanner keyboard, LessonAgent lessonAgent) {
     this.keyboard = keyboard;
   }
 
   @Override
-  public void execute(ObjectInputStream in, ObjectOutputStream out) {
+  public void execute() {
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
 
     try {
     
-      Lesson lesson = LessonAgent.get(no, in, out);
+      Lesson lesson =lessonAgent.get(no);
     
       // 기존 값 복제
       Lesson temp = lesson.clone();
@@ -34,7 +34,7 @@ public class LessonUpdateCommand implements Command {
       if (input.length() > 0) 
         temp.setContents(input);
       
-      LessonAgent.update(temp, in, out);
+      lessonAgent.update(temp);
       
       System.out.println("게시글을 변경했습니다.");
       

@@ -2,97 +2,127 @@ package com.eomcs.lms.Agent;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.List;
+import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.domain.Member;
 
 public class MemberAgent {
+  String serverAddr;
+  int port;
+  String rootPath;
+  
+  public MemberAgent (String serverAddr,int port,String rootPath) {
+    this.serverAddr = serverAddr;
+    this.port = port;
+    this.rootPath = rootPath;
+  }
   @SuppressWarnings("unchecked")
-  public static List<Member> list(ObjectInputStream in, ObjectOutputStream out) throws Exception{
+  public  List<Member> list() throws Exception{
+    try(
+        Socket socket = new Socket(this.serverAddr,this.port);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        ){
+      out.writeUTF(rootPath +"/list");
+      out.flush();
+      if(!in.readUTF().equals("OK"))
+        throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
 
-    out.writeUTF("/member/list");
-    out.flush();
-    if(!in.readUTF().equals("OK"))
-      throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
+      String status = in.readUTF();
 
-    String status = in.readUTF();
-
-    if(!status.equals("OK")) {
-      throw new Exception("서버에서 게시글 목록 가져오기 실패");
+      if(!status.equals("OK")) {
+        throw new Exception("서버에서 게시글 목록 가져오기 실패");
+      }
+      return (List<Member>) in.readObject();
     }
-    return (List<Member>) in.readObject();
+  } 
+
+
+
+  public  void add(Member board) throws Exception{
+    try(
+        Socket socket = new Socket(this.serverAddr,this.port);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());){
+      out.writeUTF(rootPath +"/add");
+      out.flush();
+      if(!in.readUTF().equals("OK"))
+        throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
+      out.writeObject(board);
+      out.flush();
+
+      String status = in.readUTF();
+
+      if(!status.equals("OK"))
+        throw new Exception("서버에서 저장 실패.");
+    }
   }
 
-  public static void add(Member member,ObjectInputStream in, ObjectOutputStream out) throws Exception{
+  public  Member get(int no) throws Exception{
 
-    out.writeUTF("/member/add");
-    out.flush();
-    if(!in.readUTF().equals("OK"))
-      throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
-    out.writeObject(member);
-    out.flush();
+    try(
+        Socket socket = new Socket(this.serverAddr,this.port);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        ){
+      out.writeUTF(rootPath +"/detail");
+      out.flush();
+      if(!in.readUTF().equals("OK"))
+        throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
+      out.writeInt(no);
+      out.flush();
 
-    String status = in.readUTF();
+      String status = in.readUTF();
 
-    if(!status.equals("OK"))
-      throw new Exception("서버에서 저장 실패.");
+      if(!status.equals("OK")) 
+        throw new Exception("서버에서 데이터가져오기 실패.");
+
+      return (Member)in.readObject();
+    }
   }
-  
-  public static Member get(int no,ObjectInputStream in, ObjectOutputStream out) throws Exception{
-    out.writeUTF("/member/detail");
-    out.flush();
-    if(!in.readUTF().equals("OK"))
-      throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
-    out.writeInt(no);
-    out.flush();
 
-    String status = in.readUTF();
+  public  void update(Member board) throws Exception{
+    try(
+        Socket socket = new Socket(this.serverAddr,this.port);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        ){
+      out.writeUTF(rootPath +"/update");
+      out.flush();
+      if (!in.readUTF().equals("OK"))
+        throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
 
-    if(!status.equals("OK")) 
-      throw new Exception("서버에서 데이터가져오기 실패.");
+      out.writeObject(board);
+      out.flush();
 
-    return (Member)in.readObject();
+      String status = in.readUTF();
+      if (!status.equals("OK")) 
+        throw new Exception("서버에서 게시글 변경하기 실패!");
+
+    }
   }
-  
-  public static void update(Member member,ObjectInputStream in, ObjectOutputStream out) throws Exception{
+  public void delete (int no) throws Exception{
+    try(
+        Socket socket = new Socket(this.serverAddr,this.port);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        ){
+      out.writeUTF(rootPath +"/delete");
+      out.flush();
+      if(!in.readUTF().equals("OK"))
+        throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
+      out.writeInt(no);
+      out.flush();
 
-    out.writeUTF("/member/update");
-    out.flush();
-    if (!in.readUTF().equals("OK"))
-      throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
-    
-    out.writeObject(member);
-    out.flush();
-    
-   String status = in.readUTF();
-    if (!status.equals("OK")) 
-      throw new Exception("서버에서 게시글 변경하기 실패!");
-  
+      String status = in.readUTF();
+
+      if(status.equals("OK"))
+        System.out.println("데이터 삭제 성공!");
+      else 
+        System.out.println("데이터 삭제 실패!");
+    }
+
   }
-  
-  public static void delete (int no,ObjectInputStream in, ObjectOutputStream out) throws Exception{
-  
-    out.writeUTF("/member/delete");
-    out.flush();
-    if(!in.readUTF().equals("OK"))
-      throw new Exception("서버에서 해당 명령어를 처리하지 못합니다.");
-    out.writeInt(no);
-    out.flush();
 
-    String status = in.readUTF();
-
-    if(status.equals("OK"))
-      System.out.println("데이터 삭제 성공!");
-    else 
-      System.out.println("데이터 삭제 실패!");
-    
-    
-  }
-  
 }
-  
-  
-  
-  
-  
-  
-  

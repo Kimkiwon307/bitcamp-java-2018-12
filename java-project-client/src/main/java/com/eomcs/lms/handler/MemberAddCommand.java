@@ -4,15 +4,19 @@ import java.io.ObjectOutputStream;
 import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
+import com.eomcs.lms.Agent.BoardAgent;
+import com.eomcs.lms.Agent.LessonAgent;
 import com.eomcs.lms.Agent.MemberAgent;
 import com.eomcs.lms.domain.Member;
 
 public class MemberAddCommand implements Command {
   
   Scanner keyboard;
+  MemberAgent memberAgent;
   
-  public MemberAddCommand(Scanner keyboard) {
+  public MemberAddCommand(Scanner keyboard, MemberAgent MemberAgent) {
     this.keyboard = keyboard;
+    this.memberAgent = memberAgent;
   }
   
   @Override
@@ -40,7 +44,7 @@ public class MemberAddCommand implements Command {
     member.setRegisteredDate(new Date(System.currentTimeMillis())); 
     
     try { 
-      MemberAgent.add(member, in, out);
+      memberAgent.add(member);
 
       System.out.println("저장하였습니다.");
 

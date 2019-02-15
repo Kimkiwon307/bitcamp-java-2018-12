@@ -10,8 +10,9 @@ public class MemberDao extends AbstractDao<Member> {
     this.filepath = filepath;
   }
   
-  public void insert(Member member) {
+  public void insert(Member member) throws Exception {
     list.add(member);
+    this.saveData();
   }
 
   public List<Member> findAll() {
@@ -19,19 +20,20 @@ public class MemberDao extends AbstractDao<Member> {
   }
 
   public Member findByNo(int no) {
-    for (Member b : list) {
-      if (b.getNo() == no) {
-        return b;
+    for (Member obj : list) {
+      if (obj.getNo() == no) {
+        return obj;
       }
     }
     return null;
   }
 
-  public int update(Member member) {
+  public int update(Member member) throws Exception {
     int index = 0;
-    for (Member b : list) {
-      if (b.getNo() == member.getNo()) {
+    for (Member obj : list) {
+      if (obj.getNo() == member.getNo()) {
         list.set(index, member);
+        this.saveData();
         return 1;
       }
       index++;
@@ -39,11 +41,12 @@ public class MemberDao extends AbstractDao<Member> {
     return 0;
   }
 
-  public int delete(int no) {
+  public int delete(int no) throws Exception {
     int index = 0;
-    for (Member b : list) {
-      if (b.getNo() == no) {
+    for (Member obj : list) {
+      if (obj.getNo() == no) {
         list.remove(index);
+        this.saveData();
         return 1;
       }
       index++;

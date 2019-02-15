@@ -10,9 +10,11 @@ import com.eomcs.lms.domain.Member;
 public class MemberDeleteCommand implements Command {
 
   Scanner keyboard;
-
-  public MemberDeleteCommand(Scanner keyboard) {
+  MemberAgent memberAgent;
+  
+  public MemberDeleteCommand(Scanner keyboard, MemberAgent memberAgent) {
     this.keyboard = keyboard;
+    this.memberAgent = memberAgent;
   }
 
   @Override
@@ -21,7 +23,7 @@ public class MemberDeleteCommand implements Command {
     int no = Integer.parseInt(keyboard.nextLine());
 
     try {
-      MemberAgent.delete(no, in, out);
+      memberAgent.delete(no);
       System.out.println("데이터 삭제 성공!");
 
     }catch(Exception e) {
