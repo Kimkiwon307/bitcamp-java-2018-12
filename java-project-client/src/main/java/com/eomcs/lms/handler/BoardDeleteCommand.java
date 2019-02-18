@@ -1,37 +1,28 @@
 package com.eomcs.lms.handler;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.List;
 import java.util.Scanner;
-import com.eomcs.lms.Agent.BoardAgent;
-import com.eomcs.lms.domain.Board;
+import com.eomcs.lms.dao.BoardDao;
 
 public class BoardDeleteCommand implements Command {
-
+  
   Scanner keyboard;
-  BoardAgent boardAgent;
-
-  public BoardDeleteCommand(Scanner keyboard, BoardAgent boardAgent) {
+  BoardDao boardDao;
+  
+  public BoardDeleteCommand(Scanner keyboard, BoardDao boardDao) {
     this.keyboard = keyboard;
-    this.boardAgent = boardAgent;
+    this.boardDao = boardDao;
   }
 
   @Override
   public void execute() {
-
     System.out.print("번호? ");
     int no = Integer.parseInt(keyboard.nextLine());
-   
+
     try {
-      boardAgent.delete(no);
-      System.out.println("삭제했습니다");
+      boardDao.delete(no);
+      System.out.println("삭제했습니다.");
       
-    }catch(Exception e) {
-      System.out.printf("게시글 삭제 오류!:%s \n",e.getMessage());
+    } catch (Exception e) {
+      System.out.printf("실행 오류! : %s\n", e.getMessage());
     }
   }
-  
-  
-
-
 }

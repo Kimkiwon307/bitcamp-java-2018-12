@@ -13,6 +13,10 @@ public class Lesson implements Cloneable, Serializable {
   private int totalHours;
   private int dayHours;
   
+  @Override
+  public Lesson clone() throws CloneNotSupportedException {
+    return (Lesson) super.clone();
+  }
   
   @Override
   public String toString() {
@@ -21,11 +25,6 @@ public class Lesson implements Cloneable, Serializable {
         + dayHours + "]";
   }
 
-  @Override
-  public Lesson clone() throws CloneNotSupportedException {
-    return (Lesson) super.clone();
-  }
-  
   public int getNo() {
     return no;
   }

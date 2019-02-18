@@ -1,25 +1,22 @@
 package com.eomcs.lms.handler;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Date;
-import java.util.List;
 import java.util.Scanner;
-import com.eomcs.lms.Agent.BoardAgent;
-import com.eomcs.lms.Agent.LessonAgent;
+import com.eomcs.lms.dao.LessonDao;
 import com.eomcs.lms.domain.Lesson;
 
 public class LessonAddCommand implements Command {
 
   Scanner keyboard;
-  LessonAgent lessonAgent;
- 
-  public LessonAddCommand(Scanner keyboard, LessonAgent lessonAgent) {
+  LessonDao lessonDao;
+  
+  public LessonAddCommand(Scanner keyboard, LessonDao lessonDao) {
     this.keyboard = keyboard;
-    this.lessonAgent = lessonAgent;
+    this.lessonDao = lessonDao;
   }
+  
 
   @Override
-  public void execute(ObjectInputStream in, ObjectOutputStream out) {
+  public void execute() {
     Lesson lesson = new Lesson();
 
     System.out.print("번호? ");
@@ -43,15 +40,13 @@ public class LessonAddCommand implements Command {
     System.out.print("일수업시간? ");
     lesson.setDayHours(Integer.parseInt(keyboard.nextLine()));
 
-    try { 
-
-      lessonAgent.add(lesson);
+    try {
+      lessonDao.insert(lesson);
       System.out.println("저장하였습니다.");
-
-    }catch(Exception e) {
-
-      System.out.printf("게시글 저장 오류!:%s \n",e.getMessage());
+      
+    } catch (Exception e) {
+      System.out.printf("실행 오류! : %s\n", e.getMessage());
     }
   }
-
+  
 }

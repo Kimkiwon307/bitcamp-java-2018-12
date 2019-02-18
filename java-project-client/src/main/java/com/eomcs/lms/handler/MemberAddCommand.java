@@ -1,26 +1,21 @@
 package com.eomcs.lms.handler;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Date;
-import java.util.List;
 import java.util.Scanner;
-import com.eomcs.lms.Agent.BoardAgent;
-import com.eomcs.lms.Agent.LessonAgent;
-import com.eomcs.lms.Agent.MemberAgent;
+import com.eomcs.lms.dao.MemberDao;
 import com.eomcs.lms.domain.Member;
 
 public class MemberAddCommand implements Command {
   
   Scanner keyboard;
-  MemberAgent memberAgent;
+  MemberDao memberDao;
   
-  public MemberAddCommand(Scanner keyboard, MemberAgent MemberAgent) {
+  public MemberAddCommand(Scanner keyboard, MemberDao memberDao) {
     this.keyboard = keyboard;
-    this.memberAgent = memberAgent;
+    this.memberDao = memberDao;
   }
   
   @Override
-  public void execute(ObjectInputStream in, ObjectOutputStream out) {
+  public void execute() {
     Member member = new Member();
     
     System.out.print("번호? ");
@@ -43,14 +38,12 @@ public class MemberAddCommand implements Command {
   
     member.setRegisteredDate(new Date(System.currentTimeMillis())); 
     
-    try { 
-      memberAgent.add(member);
-
+    try {
+      memberDao.insert(member);
       System.out.println("저장하였습니다.");
-
-    }catch(Exception e) {
-
-      System.out.printf("게시글 저장 오류!:%s \n",e.getMessage());
+      
+    } catch (Exception e) {
+      System.out.printf("실행 오류! : %s\n", e.getMessage());
     }
   }
 }

@@ -10,6 +10,10 @@ public class Board implements Cloneable, Serializable {
   private Date createdDate;
   private int viewCount;
   
+  @Override
+  public Board clone() throws CloneNotSupportedException {
+    return (Board) super.clone();
+  }
   
   @Override
   public String toString() {
@@ -17,11 +21,6 @@ public class Board implements Cloneable, Serializable {
         + ", viewCount=" + viewCount + "]";
   }
 
-  @Override
-  public Board clone() throws CloneNotSupportedException {
-    return (Board) super.clone();
-  }
-  
   public int getNo() {
     return no;
   }
