@@ -7,6 +7,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.eomcs.lms.dao.BoardDaoImpl;
 import com.eomcs.lms.dao.LessonDaoImpl;
 import com.eomcs.lms.dao.MemberDaoImpl;
@@ -15,12 +18,7 @@ import com.eomcs.lms.service.LessonDaoSkel;
 import com.eomcs.lms.service.MemberDaoSkel;
 import com.eomcs.lms.service.Service;
 
-// 멀티 스레드 적용
-// => 클라이언트 요청을 별도의 스레드에서 처리한다.
-// => 작업 
-// 1) 클라이언트의 요청 작업을 처리하는 코드를 별도의 스레드 클래스로 분리한다.
-//    => 예) RequestProcessorThread 클래스 정의
-// 2) 클라이언트가 연결되었을 때 스레드에게 실행을 위임한다.
+
 public class ServerApp {
 
 	static BoardDaoImpl boardDao ; 
@@ -28,6 +26,10 @@ public class ServerApp {
 	static LessonDaoImpl lessonDao ;
 	static HashMap<String,Service> serviceMap ;
 	static Set<String> servicekeySet;
+
+	// 스레드 풀
+	static	ExecutorService executorService = Executors.newCachedThreadPool();
+
 	public static void main(String[] args) {
 
 		try {
@@ -61,14 +63,10 @@ public class ServerApp {
 			System.out.println("서버 시작!");
 
 			while (true) {
-				// 클라이언트 소켓을 꺼낸 후 스레드에게 전달한다.
-				// 그리고 스레드를 실행시킨다.
-				// start()를 호출하면 스레드가 독립적으로 실행된다.
-				// 스레드의 run()메서드가 호출된다.
-				new RequestProcessorThread(serverSocket.accept()).start();
-				// 스레드를 시작시킨 후 즉시 리턴한다.
-				// 스레드가 작업을 종료할 때까지 기다리지 않는다.
-				// 즉 비동기로 동작한다.
+				// 독립적으로 실행 해야할 일을 스레드 풀에 맡긴다.
+				executorService.submit(new RequestHandler(serverSocket.accept()));
+				
+
 			}
 
 		} catch (Exception e) {
@@ -76,12 +74,22 @@ public class ServerApp {
 		}
 	}
 
-	static class RequestProcessorThread extends Thread{
+	static class RequestHandler implements Runnable{
+
+		static int count = 0;
 
 		Socket socket;
+		String name;
 
-		public RequestProcessorThread(Socket socket) {
+		public RequestHandler(Socket socket) {
 			this.socket = socket;
+			this.name = "핸들러-" + count++; 
+
+			System.out.printf("[%s:%s] 핸들러가 생성됨\n",Thread.currentThread().getName(),this.getName());
+		}
+
+		public String getName() {
+			return this.name;
 		}
 
 		// 독립적으로 수행할 코드를 run() 메서드에 작성한다.
@@ -91,10 +99,10 @@ public class ServerApp {
 					ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 					ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream())) {
 
-				System.out.println("클라이언트와 연결되었음.");
+				System.out.printf("[%s:%s]  클라이언트와 연결되었음.\n",Thread.currentThread().getName(), this.getName());
 
 				String request = in.readUTF();
-				System.out.println(request);
+				System.out.printf("[%s] %s\n",Thread.currentThread().getName(),this.getName());
 
 				Service service = getService(request);
 
@@ -109,7 +117,12 @@ public class ServerApp {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			System.out.println("클라이언트와의 연결을 끊었음.");			
+			try{
+				Thread.currentThread().sleep(8000);
+			}catch(Exception e) {
+			
+			}
+			System.out.printf("[%s:%s] 클라이언트와의 연결을 끊었음.\n",Thread.currentThread().getName(),this.getName());			
 		}
 
 
