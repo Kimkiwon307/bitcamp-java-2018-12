@@ -1,25 +1,20 @@
-package com.eomcs.lms.proxy;
+package com.eomcs.lms.dao;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import com.eomcs.lms.dao.MemberDao;
+
 import com.eomcs.lms.domain.Member;
 
 //서버쪽에 있는 MemberDaoImpl 객체를 대행할 클라이언트측 대행자 클래스 정의 
 //
-public class MemberDaoProxy implements MemberDao {
+public class MemberDaoImple implements MemberDao {
 
   String serverAddr;
   int port;
   String rootPath;
 
-  public MemberDaoProxy(String serverAddr, int port, String rootPath) {
-    this.serverAddr = serverAddr;
-    this.port = port;
-    this.rootPath = rootPath;
-  }
 
   @SuppressWarnings("unchecked")
   public List<Member> findAll() {
