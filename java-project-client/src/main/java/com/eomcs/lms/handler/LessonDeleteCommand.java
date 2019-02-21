@@ -19,9 +19,10 @@ public class LessonDeleteCommand implements Command {
     int no = Integer.parseInt(keyboard.nextLine());
 
     try {
-      lessonDao.delete(no);
-      System.out.println("삭제했습니다.");
-      
+      if(lessonDao.delete(no)==0) {
+      System.out.println("없어");
+      	return;
+      }
     } catch (Exception e) {
       System.out.printf("실행 오류! : %s\n", e.getMessage());
     }

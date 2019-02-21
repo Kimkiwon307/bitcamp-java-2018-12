@@ -19,9 +19,9 @@ public class MemberListCommand implements Command {
     try {
       List<Member> members = memberDao.findAll();
       for (Member member : members) {
-        System.out.printf("%3d, %-4s, %-20s, %-15s, %s\n", 
+        System.out.printf("%3d, %-4s, %-20s\n", 
             member.getNo(), member.getName(), 
-            member.getEmail(), member.getTel(), member.getRegisteredDate());
+            member.getEmail() );
       }
     } catch (Exception e) {
       System.out.printf("실행 오류! : %s\n", e.getMessage());

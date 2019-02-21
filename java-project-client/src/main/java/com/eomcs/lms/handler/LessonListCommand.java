@@ -21,9 +21,9 @@ public class LessonListCommand implements Command {
     try {
       List<Lesson> lessons = lessonDao.findAll();
       for (Lesson lesson : lessons) {
-        System.out.printf("%3d, %-15s, %10s ~ %10s, %4d\n", 
-            lesson.getNo(), lesson.getTitle(), 
-            lesson.getStartDate(), lesson.getEndDate(), lesson.getTotalHours());
+        System.out.printf("%3d,%-15s, %s, %10s ~ %10s\n", 
+            lesson.getNo(), lesson.getTitle(),lesson.getContents(), 
+            lesson.getStartDate(), lesson.getEndDate());
       }
     } catch (Exception e) {
       System.out.printf("실행 오류! : %s\n", e.getMessage());
