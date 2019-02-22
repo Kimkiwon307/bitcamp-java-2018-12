@@ -11,7 +11,7 @@ drop table  if exists lms_board;
 
 -- 수업 테이블 생성
   --한줄로 하면 유지보수 힘들다
-  
+
 --(컬럼명) (타입) (not null 여부: 기본이 null) (기본 값) (기타)...,
 create table lms_lesson(
   lesson_id int not null auto_increment primary key comment '수업 데이터 식별 번호',
