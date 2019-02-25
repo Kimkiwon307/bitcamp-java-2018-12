@@ -9,12 +9,12 @@ import java.util.List;
 import com.eomcs.lms.dao.BoardDao;
 import com.eomcs.lms.domain.Board;
 
-public class BoardDaoImple implements BoardDao {
+public class BoardDaoImpl implements BoardDao {
 
   // 외부에서 커넥션 객체를 주입 받는다.
   Connection con;
 
-  public BoardDaoImple(Connection con) {
+  public BoardDaoImpl(Connection con) {
     this.con = con;
   }
 

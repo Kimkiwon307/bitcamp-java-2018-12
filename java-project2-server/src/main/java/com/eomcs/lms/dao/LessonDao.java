@@ -8,8 +8,7 @@ public interface LessonDao {
   void insert(Lesson lesson);
   List<Lesson> findAll();
   Lesson findByNo(int no);
-  int update(Lesson lesson) ;
-	
+  int update(Lesson lesson);
   int delete(int no);
 }
 
