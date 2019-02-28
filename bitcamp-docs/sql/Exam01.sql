@@ -31,15 +31,11 @@ DB 객체(테이블, 뷰, 함수, 트리거 등)를 생성, 변경, 삭제하는
   );
 
 예) 
-> create table test01 (
+> create table test1 (
+    no  int not null,
     name varchar(50) not null,
-    kor int not null,
-    eng int not null,
-    math int not null,
-    sum int not null,
-    aver float not null
   );
-
+  
 테이블 정보 보기
 > describe 테이블명;
 > desc 테이블명;
@@ -48,7 +44,7 @@ DB 객체(테이블, 뷰, 함수, 트리거 등)를 생성, 변경, 삭제하는
 
 테이블 삭제하기
 > drop table 테이블명;
-예) drop table test01;
+예) drop table test1;
 
 ### 테이블 컬럼 옵션 
 
@@ -109,6 +105,7 @@ DB 객체(테이블, 뷰, 함수, 트리거 등)를 생성, 변경, 삭제하는
 
 입력 테스트:
 > create table test1(
+ 
   c1 int, 
   c2 float, 
   c3 numeric(6,2), /* 소수점 자릿수를 지정하면 부동소수점으로 사용 */
@@ -278,12 +275,12 @@ DBMS 중에는 고정 크기인 컬럼의 값을 비교할 때 빈자리까지 �
   eng int,
   math int,
   constraint test1_pk primary key(name, age)
-  );
+  );  -- test1_pk 는 라벨명이라 생략가능 하다
 
 - 입력 테스트:
 > insert into test1(name, age, kor, eng, math) values('aa', 10, 100, 100, 100);
 > insert into test1(name, age, kor, eng, math) values('bb', 20, 90, 90, 90);
-> insert into test1(name, age, kor, eng, math) values('aa', 11, 88, 88, 88);
+> 
 > insert into test1(name, age, kor, eng, math) values('ab', 10, 88, 88, 88);
 
 /* 이름과 나이가 같으면 중복되기 때문에 입력 거절이다. */
@@ -398,6 +395,10 @@ alter table test1
 alter table test1
   add column age int;  
 ```
+alter table test1
+  add column no2 int,
+  add column age2 int;
+....
 
 - PK 컬럼 지정, UNIQUE 컬럼 지정, INDEX 컬럼 지정
 ```
@@ -470,7 +471,7 @@ insert into test1(name) values('eee');
 
 ## 뷰(view)
 - 조회 결과를 테이블처럼 사용하는 문법
-
+- select 문장이 복잡할 때 뷰로 정의해 놓고 사용하면 편리하다.
 ```
 create table test1 (
   no int primary key auto_increment,

@@ -46,13 +46,12 @@ from lect l;
 
 /* 1단계 : 강의 상세 정보를 가져오는 select를 준비한다.
     => 서브 쿼리를 이용하여 강의실 이름과 매니저 이름, 직위 정보를 가져오기 */
-select 
-    l.lno, 
-    l.titl, 
-    (select name from room where rno=l.rno) as room_name, 
-    (select name from memb where mno=l.mno) as manager_name,
-    (select posi from mgr where mno=l.mno) as manager_posi
-from lect l
+select
+    l.lno,
+    l.titl,
+    l.rno,
+    l.mno
+from lect l;
 
 /* 2단계: 위에서 준비한 select 결과를 가상 테이블로 사용하여 
              기존의 lect_appl 테이블과 조인한다.*/
@@ -104,11 +103,11 @@ from lect_appl la
 /* 과장 또는 대리 매니저가 담당하고 있는 수강 신청만 추출하기 */
 select 
     la.lano, 
-    (select titl from lect where lno=la.lno) as lect_title, 
+    --  (select titl from lect where lno=la.lno) as lect_title, 
     (select name from memb where mno=la.mno) as stud_name,
     lec.titl,
     lec.room_name,
-    lec.manager_no,
+ --   lec.manager_no,
     lec.manager_name,
     lec.manager_posi
 from lect_appl la 

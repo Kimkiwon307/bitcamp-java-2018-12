@@ -34,7 +34,7 @@ select * from test1;
 select 컬럼명,컬럼명 from 테이블;
 select no, name, tel from test1;
 
-/* 가상의 컬럼 값을 조회하기*/
+/* 가상의 컬럼 값을 조회하기 = projection이라 부른다*/
 select no, concat(name,'(',class,')') from test1;
 ```
 
@@ -53,14 +53,14 @@ from test1;
 
 /* as를 생략해도 된다.*/
 select 
-    no as num, 
+    no  num, 
     concat(name,'(',class,')') title 
 from test1; 
 ``` 
 
 ### 조회할 때 조건 지정하기
 - where 절과 연산자를 이용하여 조회 조건을 지정할 수 있다.
-
+ - 이렇게 조건을 지정하여 결과를 선택하는 것을 "셀렉션" 이라한다.
 ```
 select ... from ... where 조건...
 select * 
@@ -83,20 +83,20 @@ from test1
 where working='Y' or class='java100';
 
 /* java100기 학생 중에 재직자만 조회하라!*/
-select no, name
+select no, name 
 from test1
 where working='Y' and class='java100';
 
 /* 재직자가 아닌 사람만 조회하라!*/
-select no, name
+select no, name , class, working
 from test1
 where not working = 'Y';
 
-select no, name
+select no, name, class, working
 from test1
 where working != 'Y';
 
-select no, name
+select no, name, class, working
 from test1
 where working <> 'Y';
 
@@ -106,7 +106,7 @@ update test1 set
 where (no % 2) = 0;
 
 /* 학생 번호가 3의 배수인 경우 전화번호를 '2222'로 변경하라*/
-update test16 set
+update test1 set
   tel = '2222'
 where (no % 3) = 0;
 
@@ -196,10 +196,10 @@ select *
 from test1
 where name like 's0%';
 
-/* => _는 딱 1자를 의미한다.*/
+/* => _는 딱 1자를 의미한다. 오라클은 ? 이다*/
 select *
 from test1
-where name like 's0_';
+where name like 's0_'; 
 ```
 
 ### 날짜 다루기
@@ -266,12 +266,12 @@ select regdt, date(regdt), time(regdt) from test1;
 date_add(날짜데이터, interval 값 단위);
 date_sub(날짜데이터, interval 값 단위);
 
-select date_add(now(), interval 11 day);
+select date_add(now(), interval 7 day);
 select date_sub(now(), interval 11 day);
 
 /* 두 날짜 사이의 간격을 알아내기 */
 datediff(날짜1, 날짜2);
-select datediff(curdate(), '2018-3-19');
+select datediff(curdate(), '2019-3-7');
 
 /* 날짜에서 특정 형식으로 값을 추출하기 */
 date_format(날짜, 형식)
