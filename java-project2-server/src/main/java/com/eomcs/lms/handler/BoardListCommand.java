@@ -1,5 +1,6 @@
 package com.eomcs.lms.handler;
 import java.util.List;
+
 import com.eomcs.lms.dao.BoardDao;
 import com.eomcs.lms.domain.Board;
 
@@ -20,6 +21,12 @@ public class BoardListCommand extends AbstractCommand {
           String.format("%3d, %-20s, %s, %d", 
             board.getNo(), board.getContents(), 
             board.getCreatedDate(), board.getViewCount()));
+  
+//      try {
+//		Thread.currentThread().sleep(3000);
+//	} catch (InterruptedException e) {
+//		e.printStackTrace();
+//	}
     }
   }
 

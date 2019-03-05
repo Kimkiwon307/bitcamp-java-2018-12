@@ -29,91 +29,129 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
 import com.eomcs.lms.context.ApplicationContextListener;
 import com.eomcs.lms.handler.Command;
+import com.eomcs.util.DataSource;
 
 public class ServerApp {
 
-  // ApplicationContextListener(옵저버) 목록을 보관할 객체
-  ArrayList<ApplicationContextListener> listeners = new ArrayList<>();
+	// ApplicationContextListener(옵저버) 목록을 보관할 객체
+	ArrayList<ApplicationContextListener> listeners = new ArrayList<>();
 
-  public void addApplicationContextListener(ApplicationContextListener listener) {
-    listeners.add(listener);
-  }
+	// 공용 객체를 보관하는 저장소
+	HashMap<String,Object> context = new HashMap<>();
 
-  public void service() throws Exception {
+	public void addApplicationContextListener(ApplicationContextListener listener) {
+		listeners.add(listener);
+	}
 
-    try (ServerSocket ss = new ServerSocket(8888)) {
-      
-      // App에서 사용할 객체를 보관하는 저장소
-      HashMap<String,Object> context = new HashMap<>();
+	public void service() throws Exception {
 
-      // 애플리케이션을 시작할 때, 등록된 리스너에게 알려준다.
-      for (ApplicationContextListener listener : listeners) {
-        listener.contextInitialized(context);
-      }
+		try (ServerSocket ss = new ServerSocket(8888)) {
 
-      System.out.println("서버 실행 중...");
-      
-      while (true) {
 
-        try (Socket socket = ss.accept();
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
-            PrintWriter out = new PrintWriter(socket.getOutputStream())) {
+			// 애플리케이션을 시작할 때, 등록된 리스너에게 알려준다.
+			for (ApplicationContextListener listener : listeners) {
+				listener.contextInitialized(context);
+			}
 
-          // 클라이언트의 요청 읽기
-          String request = in.readLine();
-          
-          if (request.equalsIgnoreCase("stop")) {
-            System.out.println("종료합니다.");
-            break;
-          }
-          
-          // 클라이언트에게 응답하기
-          Command commandHandler = (Command) context.get(request);
-          
-          if (commandHandler == null) {
-            out.println("실행할 수 없는 명령입니다.");
-            out.println("!end!");
-            out.flush();
-            continue;
-          }
-          
-          commandHandler.execute(in, out);
-          
-          out.println("!end!");
-          out.flush();
+			System.out.println("서버 실행 중...");
 
-        } catch (Exception e) {
-          System.out.println("명령어 실행 중 오류 발생 : " + e.toString());
-          e.printStackTrace();
-        } // try(Socket)
-        
-      } // while
+			while (true) {
 
-      // 애플리케이션을 종료할 때, 등록된 리스너에게 알려준다.
-      for (ApplicationContextListener listener : listeners) {
-        listener.contextDestroyed(context);
-      }
+				new RequestHandlerThread(ss.accept()).start();
 
-    } catch (Exception e) {
-      e.printStackTrace();
-    } // try(ServerSocket)
+			} // while
 
-  }
+			// 애플리케이션을 종료할 때, 등록된 리스너에게 알려준다.
 
-  public static void main(String[] args) throws Exception {
-    ServerApp app = new ServerApp();
+			//			for (ApplicationContextListener listener : listeners) {
+			//				listener.contextDestroyed(context);
+			//			}
 
-    // App이 실행되거나 종료될 때 보고를 받을 옵저버를 등록한다.
-    app.addApplicationContextListener(new ApplicationInitializer());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} // try(ServerSocket)
 
-    // App 을 실행한다.
-    app.service();
-  }
+	}
+
+
+	public static void main(String[] args) throws Exception {
+		ServerApp app = new ServerApp();
+
+		// App이 실행되거나 종료될 때 보고를 받을 옵저버를 등록한다.
+		app.addApplicationContextListener(new ApplicationInitializer());
+
+		// App 을 실행한다.
+		app.service();
+	}
+	// 바깥 클래스(serverapp)의 인스턴스 필드를 사용한다면 
+	// inner 클래스로 정의하라
+	class RequestHandlerThread extends Thread {
+
+		Socket socket;
+
+		public RequestHandlerThread(Socket socket) {
+			this.socket = socket;
+		}
+
+		@Override
+		public void run() {
+
+			DataSource dataSource = (DataSource)context.get("dataSource");
+
+			Connection con = dataSource.getConnection();
+
+			try (Socket socket = this.socket;
+					BufferedReader in = new BufferedReader(
+							new InputStreamReader(socket.getInputStream()));
+					PrintWriter out = new PrintWriter(socket.getOutputStream())) {
+
+				// 클라이언트의 요청 읽기
+				String request = in.readLine();
+
+
+				// 클라이언트에게 응답하기
+				Command commandHandler = (Command) context.get(request);
+
+				if (commandHandler == null) {
+					out.println("실행할 수 없는 명령입니다.");
+					out.println("!end!");
+					out.flush();
+					return;
+				}
+				try {
+					commandHandler.execute(in, out);
+				}catch (Exception e) {
+					try {
+						con.rollback();
+					} catch (SQLException e1) {
+					}
+					
+					
+					out.printf("실행 오류! : %s\n", e.getMessage());
+				}
+			
+				out.println("!end!");
+				out.flush();
+				con.commit();
+
+			} catch (Exception e) {
+				System.out.println("명령어 실행 중 오류 발생 : " + e.toString());
+				e.printStackTrace();
+			}  finally {
+				dataSource.returnConnection(con);
+			}
+
+		} 
+	}
+
+
 }
 
 

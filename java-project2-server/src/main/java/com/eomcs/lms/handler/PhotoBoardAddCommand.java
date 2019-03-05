@@ -50,7 +50,7 @@ public class PhotoBoardAddCommand extends AbstractCommand {
     
     response.println("저장하였습니다.");
    
-    ApplicationInitializer.con.commit();
+//    ApplicationInitializer.con.commit();
   }
 }
 
