@@ -17,26 +17,47 @@
 	</select>
 
 	<select id="select2" resultMap="boardMap" parameterType="int">
-		select * from x_board where board_id = #{amuguna}
+		select *
+		from x_board where board_id = #{amuguna}
 	</select>
 
 	<select id="select3" resultMap="boardMap" parameterType="string">
-		select * from x_board where title like concat('%', #{value}, '%')
+		select *
+		from x_board where title like concat('%', #{value}, '%')
 	</select>
-	
-	
-	
+
+
+
 	<insert id="insert1" parameterType="board">
-	 insert into x_board(title,contents)
-	values(#{title},#{contents})
-	 
+		insert into
+		x_board(title,contents)
+		values(#{title},#{contents})
 	</insert>
 
-  <insert id="insert2" parameterType="map">
-   insert into x_board(title,contents)
-  values(#{title},#{contents})
-  
-  </insert>
+	<insert id="insert2" parameterType="map">
+		insert into
+		x_board(title,contents)
+		values(#{title},#{contents})
+	</insert>
 
+	<update id="update" parameterType="board">
+		update x_board set
+		title = #{title},
+		contents = #{contents}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from x_borad
+		where
+		board_id = #{value}
+	</delete>
+
+<!--  insert 실행 후 자동 생성된 PK값 리턴받기 -->
+  
+	<insert id="insert3" parameterType="board"
+	 useGeneratedKeys="true" keyColumn="board_id" keyProperty="no">
+		insert into x_board(title,contents)
+		values(#{title},#{contents})
+	</insert>
 
 </mapper>
