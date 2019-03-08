@@ -8,50 +8,51 @@ import java.util.Scanner;
 
 public class BoardInsertApp {
 
-	// 다음과 같이 게시물을 등록하는 프로그램을 작성하라
-	//---------------------------------
-	// 제목 ? aaaa
-	// 내용?  bbbb
-	// 등록하시겠습니까?(Y/n)
-	// 등록하였습니다.
-	//-----------------------------------
-	public static void main(String[] args) {
+  // 다음과 같이 게시물을 등록하는 프로그램을 작성하라!
+  // ----------------------------
+  // 제목? aaa
+  // 내용? bbb
+  // 등록하시겠습니까?(Y/n) y
+  // 등록하였습니다.
+  // 등록하시겠습니까?(Y/n) n
+  // 등록을 취소 하였습니다.
+  //----------------------------
+  public static void main(String[] args) {
+    String title = null;
+    String contents = null;
 
-		Scanner kb = new Scanner(System.in);	
-		try(Connection con = DriverManager.getConnection(
-				"jdbc:mariadb://localhost/bitcampdb?user=bitcamp&password=1111")){
-			System.out.println("디비엠에스 연결됨!");
-			try(Statement stmt = con.createStatement()){
-
-
-				System.out.print("제목 :");
-				String s =kb.nextLine();
-
-				System.out.print("내용 :");
-				String c = kb.nextLine();
-
-				System.out.print("등록하시겠습니까?(Y/n)");
-				String command = kb.nextLine();
-
-				if(command.equalsIgnoreCase("y") || command.equals(" ")) {
-					System.out.println("등록하였습니다");
-
-					
-					stmt.executeUpdate("insert into x_board(title,contents)" 
-									+ " values( '"+s+"','"+c+"')");
-				}
-
-			}
-		}catch(Exception e) {
-			System.out.println("DBMS 연결 중 오류 발생");
-			e.printStackTrace();
-		}	
-
-
-
-
-
-
-	}
+    try (Scanner keyboard = new Scanner(System.in)) {
+      System.out.print("제목? ");
+      title = keyboard.nextLine();
+      
+      System.out.print("내용? ");
+      contents = keyboard.nextLine();
+      
+      System.out.print("입력하시겠습니까?(Y/n) ");
+      String input = keyboard.nextLine();
+      
+      if (!input.equalsIgnoreCase("y") &&
+          input.length() != 0) {
+        System.out.println("등록을 취소 하였습니다.");
+        return;
+      }
+    }
+    
+    try (Connection con = DriverManager.getConnection(
+        "jdbc:mariadb://localhost/bitcampdb?user=bitcamp&password=1111")) {
+      
+      try (Statement stmt = con.createStatement()) {
+        
+        stmt.executeUpdate(
+            "insert into x_board(title,contents)"
+            + " values('" + title + "','" + contents + "')");
+        
+        System.out.println("등록하였습니다.");
+      }
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
 
 }

@@ -2,9 +2,6 @@ package com.eomcs.lms.handler;
 
 import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.sql.Connection;
-
-import com.eomcs.util.DataSource;
 
 // 추상 클래스의 목적?
 // => 서브 클래스에게 필드나 메서드를 상속해 주는 용도.

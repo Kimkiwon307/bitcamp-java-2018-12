@@ -2,22 +2,18 @@ package ch22.g;
 
 import java.io.Serializable;
 
-
-// setter/getter 추가하기
-// 
-public class Score2 implements Serializable{
-
+public class Score2 implements Serializable {
   private static final long serialVersionUID = 1L;
   
   private String name;
-  private  int kor;
-  private  int eng;
-  private  int math;
+  private int kor;
+  private int eng;
+  private int math;
   private int sum;
-  private  float aver;
-  
+  private float aver;
+
   public Score2() {
-    System.out.println("Score2 기본생성자");
+    System.out.println("Score2()");
   }
 
   @Override
@@ -31,7 +27,7 @@ public class Score2 implements Serializable{
   }
 
   public void setName(String name) {
-    System.out.println("set.name");
+    System.out.println("setName()");
     this.name = name;
   }
 
@@ -40,7 +36,7 @@ public class Score2 implements Serializable{
   }
 
   public void setKor(int kor) {
-    System.out.println("set.name");
+    System.out.println("setKor()");
     this.kor = kor;
   }
 
@@ -49,7 +45,7 @@ public class Score2 implements Serializable{
   }
 
   public void setEng(int eng) {
-    System.out.println("set.name");
+    System.out.println("setEng()");
     this.eng = eng;
   }
 
@@ -58,7 +54,7 @@ public class Score2 implements Serializable{
   }
 
   public void setMath(int math) {
-    System.out.println("set.name");
+    System.out.println("setMath()");
     this.math = math;
   }
 
@@ -67,7 +63,7 @@ public class Score2 implements Serializable{
   }
 
   public void setSum(int sum) {
-    System.out.println("set.name");
+    System.out.println("setSum()");
     this.sum = sum;
   }
 
@@ -76,9 +72,13 @@ public class Score2 implements Serializable{
   }
 
   public void setAver(float aver) {
-    System.out.println("set.name");
+    System.out.println("setAver()");
     this.aver = aver;
   }
   
   
 }
+
+
+
+

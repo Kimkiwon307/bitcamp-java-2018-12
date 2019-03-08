@@ -2,17 +2,18 @@ package ch22.g;
 
 import java.io.Serializable;
 
-public class Score1 implements Serializable{
+public class Score1 implements Serializable {
   private static final long serialVersionUID = 1L;
-  protected String name;
-  protected  int kor;
-  protected  int eng;
-  protected  int math;
-  protected int sum;
-  protected  float aver;
   
+  protected String name;
+  protected int kor;
+  protected int eng;
+  protected int math;
+  protected int sum;
+  protected float aver;
+
   public Score1() {
-    System.out.println("Score1 기본생성자");
+    System.out.println("Score1()");
   }
 
   @Override
@@ -21,4 +22,9 @@ public class Score1 implements Serializable{
         + sum + ", aver=" + aver + "]";
   }
   
+  
 }
+
+
+
+

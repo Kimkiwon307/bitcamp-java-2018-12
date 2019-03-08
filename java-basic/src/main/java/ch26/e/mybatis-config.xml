@@ -1,41 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" ?> <!-- 주석 -->
-
-<!-- XML 태그의 형식에 대한 정보. 루트 엘리먼트(=태크) : configuation 형식에 대한 공식적인(PUBLIC) 이름: 
-	"-//mybatis.org//DTD Config 3.0//EN" 형식을 정의한 파일 : "http://mybatis.org/dtd/mybatis-3-config.dtd" -->
+<?xml version="1.0" encoding="UTF-8" ?> <!-- XML 선언. 반드시 첫 번째로 와야 한다. -->
 
 <!DOCTYPE configuration
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
-<configuration> <!-- 루트 엘리먼트 , 부모엘리먼트 , 어센던트(조상) -->
+  
+<configuration>
+  
+  <properties resource="ch26/e/jdbc.properties"/>
+  
+  <typeAliases>
+    <package name="ch26.e"/> 
+  </typeAliases>
 
-	<properties resource="ch26/e/jdbc.properties" />
-
-	<typeAliases>
-        <package name="ch26.e"/>
-	</typeAliases>
-
-	<environments default="development"> <!-- 자식 엘리먼트 , 디센던트 -->
-
-		<environment id="development">
-
-			<transactionManager type="JDBC" />
-
-			<dataSource type="POOLED">
-
-
-				<property name="driver" value="${jdbc.driver}" /> <!-- 프로퍼티는 트랜젝션메니저는 조상아님 -->
-				<property name="url" value="${jdbc.url}" />
-				<property name="username" value="${jdbc.username}" />
-				<property name="password" value="${jdbc.password}" />
-		
-			</dataSource>
-		</environment>
-	</environments>
-
-	<!-- SQL이 보관된 파일의 목록 -->
-	<mappers>
-
-		<!-- SQL이 보관된 파일의 경로 -->
-		<mapper resource="ch26/e/BoardMapper.xml" />
-	</mappers>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <mappers>
+    <mapper resource="ch26/e/BoardMapper.xml"/>
+  </mappers>
 </configuration>
+
+
+
+
+
+

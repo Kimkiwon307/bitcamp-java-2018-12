@@ -5,10 +5,11 @@ public abstract class Car {
   protected int capacity;
   
   public void start() {
-    System.out.println("시동건다");
+    System.out.println("시동 건다!");
   }
+  
   public void stop() {
-    System.out.println("시동 끈다");
+    System.out.println("시동 끈다!");
   }
   
   public abstract void run();

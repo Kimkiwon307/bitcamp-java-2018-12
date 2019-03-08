@@ -1,8 +1,7 @@
 package design_pattern.proxy.after.server;
 
-// 실제 일을 하는 객체와 프록시 객체가 공통으로 따라야 하는 규칙을 정의한다.
-
-public class CalculatorImpl implements Calculator{
+// 실제 일을 하는 객체는 인터페이스의 규칙에 따라 동작하도록 구현되어야 한다.
+public class CalculatorImpl implements Calculator {
   
   public int plus(int a, int b) {
     return a + b;
@@ -11,8 +10,4 @@ public class CalculatorImpl implements Calculator{
   public int minus(int a, int b) {
     return a - b;
   }
-
-
-  
-
 }

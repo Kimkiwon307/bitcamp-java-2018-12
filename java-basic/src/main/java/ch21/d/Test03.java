@@ -13,23 +13,18 @@ public class Test03 {
     addName(null); // 전학간 학생인 경우 해당 번호의 이름을 null로 설정한다고 가정하자!
     addName("유관순");
     
-   
+    for (int i = 0; i <= list.size(); i++) {
       
       // 리턴 값이 아닌 별개의 경로로 전달되는 예외는 
       // try ~ catch 로 처리한다.
       // 
       try {
-        String name = "aa";
-        System.out.println(name);
-        String name2 = getName(-1);
-        System.out.println(getName(-1));
-       
+        String name = getName(i);
+        System.out.println(getName(i));
       } catch (Exception e) {
         System.out.println("목록에서 데이터를 꺼낸 중에 오류 발생!");
-          
-      }finally {
       }
-    
+    }
    
     System.out.printf("입력된 이름 개수는 %d 입니다.\n", list.size());
     
@@ -42,10 +37,7 @@ public class Test03 {
       
     } catch (Exception e) {
       System.out.println("나누기 오류 입니다.");
-    } finally {
-      
     }
-   
   }
   
   static void addName(String name) {
@@ -81,3 +73,9 @@ public class Test03 {
  
  
 }
+
+
+
+
+
+

@@ -59,6 +59,8 @@ values(4, '제목4','내용');
 
 insert into  x_board(board_id, title, contents)
 values(5, '제목5','내용');
+insert into  x_board(board_id, title, contents)
+values(6, '제목6','내용');
 
 -- 데이타 조회
 insert into x_board_file(board_file_id, file_path, board_id) 
