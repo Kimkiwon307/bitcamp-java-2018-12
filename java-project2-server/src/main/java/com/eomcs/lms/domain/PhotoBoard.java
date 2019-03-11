@@ -12,15 +12,9 @@ public class PhotoBoard implements Serializable {
   private Date createdDate;
   private int viewCount;
   private int lessonNo;
-  private Lesson lesson;
   
-  public Lesson getLesson() {
-	return lesson;
-}
-public void setLesson(Lesson lesson) {
-	this.lesson = lesson;
-}
-// 조인된 자식 테이블의 데이터를 보관할 필드
+  // 조인된 자식 테이블의 데이터를 보관할 필드
+  private Lesson lesson;
   private List<PhotoFile> files;
   
   public int getNo() {
@@ -53,13 +47,17 @@ public void setLesson(Lesson lesson) {
   public void setLessonNo(int lessonNo) {
     this.lessonNo = lessonNo;
   }
-public List<PhotoFile> getFiles() {
-	return files;
-}
-public void setFiles(List<PhotoFile> files) {
-	this.files = files;
-}
-  
-  
+  public List<PhotoFile> getFiles() {
+    return files;
+  }
+  public void setFiles(List<PhotoFile> files) {
+    this.files = files;
+  }
+  public Lesson getLesson() {
+    return lesson;
+  }
+  public void setLesson(Lesson lesson) {
+    this.lesson = lesson;
+  }
   
 }

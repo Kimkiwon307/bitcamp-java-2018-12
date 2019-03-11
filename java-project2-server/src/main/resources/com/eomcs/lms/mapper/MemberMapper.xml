@@ -7,40 +7,38 @@
 <mapper namespace="MemberMapper">
   
   <resultMap type="member" id="memberMap">
-    <id column="member_id" property="no"/>
-    <result column="name" property="name"/>
-    <result column="email" property="email"/>
-    <result column="pwd" property="password"/>
-    <result column="cdt" property="registeredDate"/>
-    <result column="tel" property="tel"/>
-    <result column="photo" property="photo"/>
+    <id column="member_id"  property="no"/>
+    <result column="name"   property="name"/>
+    <result column="email"  property="email"/>
+    <result column="pwd"    property="password"/>
+    <result column="cdt"    property="registeredDate"/>
+    <result column="tel"    property="tel"/>
+    <result column="photo"  property="photo"/>
   </resultMap>
+  
+  <sql id="default-colums">
+  
+   member_id, 
+      name, 
+      email, 
+      tel 
+  
+  </sql>
+  
   
   <select id="findAll" resultMap="memberMap">
     select 
-      member_id, 
-      name, 
-      email, 
-      pwd, 
-      tel, 
-      cdt,
-      photo
-      
+     <include refid="default-colums"/>
     from 
       lms_member
     order by 
-      member_id desc
+      name asc
   </select>
   
   <select id="findByNo" resultMap="memberMap" parameterType="int">
     select 
-    
-      member_id, 
-      name, 
-      email, 
-      pwd, 
-      tel, 
-      cdt,
+  <include refid="default-colums"/>,
+      cdt, 
       photo
     from 
       lms_member
@@ -48,21 +46,31 @@
       member_id = #{value}
   </select>
   
+  <select id="findByKeyword" resultMap="memberMap" parameterType="string">
+  <bind name ="pattern1" value="'%' + _parameter + '%'"/> 
+    select 
+     <include refid="default-colums"></include>
+    from 
+      lms_member
+    where 
+      name like #{pattern1}
+      or email like #{pattern1}
+      or tel like #{pattern1}
+    order by name asc
+  </select>
+  
   <insert id="insert" parameterType="member">
     insert into lms_member(
-       name, 
-      email, 
-      pwd, 
-      tel, 
-      cdt,
-      photo
-      )
+      name,
+      email,
+      pwd,
+      tel,
+      photo)
     values(
-      #{name}, 
-      #{email}, 
-      #{password}, 
-      #{tel}, 
-      #{registeredDate}, 
+      #{name},
+      #{email},
+      password(#{password}),
+      #{tel},
       #{photo})
   </insert>
   
@@ -71,38 +79,18 @@
     <set>
       <if test="name != null">name = #{name},</if>
       <if test="email != null">email = #{email},</if>
-      <if test="password != null">pwd = #{password},</if>
+      <if test="password != null">pwd = password(#{password}),</if>
       <if test="tel != null">tel = #{tel},</if>
-       <if test="photo != null">photo = #{photo}</if>
-    
-    </set>
-    where member_id = #{no}
+      <if test="photo != null">photo = #{photo}</if>
+    </set>  
+    where 
+      member_id = #{no}
   </update>
   
   <delete id="delete" parameterType="int">
-    delete  from 
-     lms_member 
-    where
-      member_id = #{value}
+    delete from lms_member 
+    where member_id = #{value}
   </delete>
-
-<select id="findbykeyword" resultMap="memberMap" parameterType="string">
-
-select 
- member_id, 
- name, 
- email, 
- tel 
-from 
-  lms_member
-where name like concat('%', #{name}, '%')
-      or email like concat('%', #{email}, '%')
-      or tel like concat('%', #{tel}, '%')
-      order by name asc
-
-</select>
-
-
 </mapper>
 
 
