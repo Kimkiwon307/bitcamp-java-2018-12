@@ -1,4 +1,4 @@
-// 14단계: Mybatis 퍼시스턴스 프레임워크에 트랜잭션 관리자 도입하기
+// 16단계: Mybatis 퍼시스턴스 프레임워크에 트랜잭션 관리자 도입하기
 // => 트랜잭션 관리자를 도입하여 여러 개의 데이터 변경 작업을 한 단위의 작업으로 묶어 다룬다.
 // 
 // 작업:
@@ -122,7 +122,8 @@ public class ServerApp {
         try {
           commandHandler.execute(in, out);
         } catch (Exception e) {
-          out.printf("실행 오류! : %s\n", e.getMessage());
+        	out.printf("실행 오류! : %s\n", e.getMessage());
+        	e.printStackTrace();
         }
         
         out.println("!end!");
