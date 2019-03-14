@@ -7,26 +7,29 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.ibatis.io.Resources;
 
-import com.eomcs.lms.handler.Command;
+import com.eomcs.lms.context.RequestMappingHandlerMapping.RequestMappingHandler;
 
 // Command 객체를 자동 생성하는 역할을 수행한다.
 public class ApplicationContext {
 
+	// 인스턴스를 생성할 클래스 정보
 	ArrayList<Class<?>> classes = new ArrayList<>();
+
+	// 생성한 인스턴스를 보관하는 저장소
 	HashMap<String,Object> beanContainer = new HashMap<>();
 
+	public ApplicationContext(String packageName, Map<String,Object> beans) throws Exception {
 
-	public ApplicationContext(String packageName ,HashMap<String,Object> beans) throws Exception {
-
-		if(beans != null && beans.size() > 0) {
+		// 외부에서 생성한 인스턴스가 파라미터로 넘어온다면 먼저 저장소에 보관한다.
+		if (beans != null && beans.size() > 0) {
 			Set<String> names = beans.keySet();
-			for(String name : names) {
-				addBean(name,beans.get(names));
+			for (String name : names) {
+				addBean(name, beans.get(name));
 			}
 		}
 
@@ -38,27 +41,33 @@ public class ApplicationContext {
 		// => 또한 중첩 클래스도 제외한다.
 		findClasses(packageDir, packageName);
 
-		// 3) Command 인터페이스를 구현한 클래스만 찾아서 인스턴스를 생성한다.
-		prepareCommand();
 
-		// 4) 저장소에 보관된 객체의 이름과 클래스명을 출력한다.
-		System.out.println("---------------------------------");
+		prepareComponent();
+
+		 postProcess();
+		// 저장소에 보관된 객체의 이름과 클래스명을 출력한다.
+		System.out.println("-------------------------------");
 		Set<String> names = beanContainer.keySet();
-		for(String name : names) {
-			System.out.printf("$s : $s\n",
+		for (String name : names) {
+			System.out.printf("%s : %s\n", 
 					name, beanContainer.get(name).getClass().getSimpleName());
 		}
+		
+		
 	}
 
+	// 인스턴스를 추가할 때 호출한다.
+	// 빈(bean) == 인스턴스 == 객체 
+	//
 	private void addBean(String name, Object bean) {
-		if(name == null || name.length() ==0 || bean == null)
+		if (name == null || name.length() == 0 || bean == null)
 			return;
-		beanContainer.put(name,bean);
+		beanContainer.put(name, bean);
 	}
-	
+
+	// 저장소에 보관된 인스턴스를 꺼낸다.
 	public Object getBean(String name) {
 		return beanContainer.get(name);
-				
 	}
 
 	private void findClasses(File dir, String packageName) throws Exception {
@@ -108,95 +117,104 @@ public class ApplicationContext {
 		}
 	}
 
-	private void prepareCommand() throws Exception {
+	private void prepareComponent() throws Exception {
 		for (Class<?> clazz : classes) {
-			// 클래스 또는 조상 클래스가 구현한 인터페이스의 목록을 알아낸다.
-			List<Class<?>> interfaces = getAllInterfaces(clazz);
 
-			for (Class<?> i : interfaces) {
-				if (i == Command.class) {
-					// Command 인터페이스의 구현체인 경우에 해당 클래스의 인스턴스를 생성한다.
-					Object obj = createInstance(clazz);
-					if(obj != null) {//제대로 생성했으면 빈컨테이너에 저장한다.
-						// 빈컨테이너에 Command 객체를 저장할 때 key 값은 name 필드 값으로 한다.
-						// => 클래스에서 getName() 메서드를 알아낸다.
-						Method getName = clazz.getMethod("getName");
-						addBean(
-								(String)getName.invoke(obj), //getName()을 호출하여 리턴 값을 키로 사용한다.
+			Component compAnno = clazz.getAnnotation(Component.class);
+			if (compAnno == null) 
+				continue;
+
+			Object obj = createInstance(clazz);
+			
+			System.out.println(obj.getClass().getName() + "sisisisiibal");
+			if (obj != null) { // 제대로 생성했으면 빈컨테이너에 저장한다.
+				addBean(
+						compAnno.value().length() >0 ? compAnno.value() : clazz.getName() ,
 								obj);
-					}
-					break;
-				}
 			}
 		}
 	}
 
-	private List<Class<?>> getAllInterfaces(Class<?> clazz) {
-		ArrayList<Class<?>> list = new ArrayList<>();
 
-		while (clazz != Object.class) {
-			Class<?>[] interfaces = clazz.getInterfaces();
-			for (Class<?> i : interfaces) 
-				list.add(i);
-			clazz = clazz.getSuperclass();
-		}
 
-		return list;
-	}
 	private Object createInstance(Class<?> clazz) throws Exception {
 		// 파라미터로 주어진 클래스 정보를 가지고 인스턴스를 생성한다.
 		// => 기본 생성자를 알아낸다.
-		try {
+		try { 
 			Constructor<?> defaultConstructor = clazz.getConstructor();
 			return defaultConstructor.newInstance();
-		}catch (Exception e) {
-
+		} catch (Exception e) {
+			// 기본 생성자를 못 찾으면 예외 발생한다. 
+			// 그냥 무시하고 다른 생성자를 찾아 인스턴스를 생성한다.
 		}
+
 		// => 기본 생성자가 없다면, 다른 생성자 목록을 얻는다.
 		Constructor<?>[] constructors = clazz.getConstructors();
-		for(Constructor<?> c : constructors) {
+		for (Constructor<?> c : constructors) {
 			// => 생성자를 호출하려면 먼저 어떤 타입의 파라미터가 필요한지 알아야 한다.
 			Class<?>[] paramTypes = c.getParameterTypes();
 
 			// => 생성자가 요구하는 타입의 파라미터 값이 저장소에 있는지 찾아 본다.
 			Object[] paramValues = getParameterValues(paramTypes);
-			if(paramValues != null) { //생성자가 요구하는 모든 파라미터 값을 찾았다면
-				//				생성자를 통해 인스턴스를 생성하여 리턴한다.
+			if (paramValues != null) { // 생성자가 요구하는 모든 파라미터 값을 찾았다면 
+				// 생성자를 통해 인스턴스를 생성하여 리턴한다.
+				System.out.println(c.newInstance(paramValues)+ "a");
+System.out.println(c.newInstance(paramValues)+ "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 				return c.newInstance(paramValues);
 			}
 		}
 		return null;
-
 	}
 
 	private Object[] getParameterValues(Class<?>[] paramTypes) {
-		//파라미터 타입에 해당하는 객체를 빈컨테이너에서 찾아 배열을 만드렁 리턴한다.
+		// 파라미터 타입에 해당하는 객체를 빈컨테이너에서 찾아 배열을 만들어 리턴한다.
 		ArrayList<Object> values = new ArrayList<>();
-		for(Class<?> type : paramTypes) {
+
+		for (Class<?> type : paramTypes) {
 			Object value = findBean(type);
-			if(value != null) {
-				values.add(values);
+			if (value != null) {
+				values.add(value);
 			}
 		}
 
-		if(values.size() == paramTypes.length)
-			// 파라미터의 타입 목록에 지정된 객체를 모두 찾았으면 배열로 리턴한다
+		if (values.size() == paramTypes.length) 
+			// 파라미터의 타입 목록에 지정된 객체를 모두 찾았으면 배열로 리턴한다.  
 			return values.toArray();
-		else
-			//못찾앗으면 null 리턴ㄴ
+		else // 못 찾았으면 null을 리턴한다.
 			return null;
 	}
 
 	private Object findBean(Class<?> type) {
 		// 빈 컨테이너에서 특정 타입의 인스턴스를 찾기
 		// => 먼저 빈 컨테이너에서 인스턴스 목록을 꺼낸다.
-		Collection<Object> beans = 	beanContainer.values();
-		for(Object bean : beans) {
-			if(type.isInstance(bean))
+		Collection<Object> beans = beanContainer.values();
+		for (Object bean : beans) {
+			if (type.isInstance(bean))
 				return bean;
 		}
 		return null;
 	}
+
+	//bean 생성을 완료한 후 작업 수행
+	public void postProcess(){
+		RequestMappingHandlerMapping  handlerMapping = new RequestMappingHandlerMapping();
+		Collection<Object> beans = beanContainer.values();
+
+		for(Object bean : beans) {
+			Method[] methods = 	bean.getClass().getMethods();
+			for(Method m : methods ) {
+				RequestMapping requestMapping = m.getAnnotation(RequestMapping.class);
+				if(requestMapping == null)
+					continue;
+				RequestMappingHandler handler = new RequestMappingHandler(bean,m);
+
+				handlerMapping.add(requestMapping.value(), handler);
+			}
+	
+		}
+	beanContainer.put("handlerMapping", handlerMapping);
+	}
+	
 }
 
 
