@@ -1,14 +1,12 @@
 package com.eomcs.lms.handler;
 import java.util.List;
-
 import org.springframework.stereotype.Component;
-
 import com.eomcs.lms.context.RequestMapping;
 import com.eomcs.lms.dao.MemberDao;
 import com.eomcs.lms.domain.Member;
 
-@Component()
-public class MemberCommand  {
+@Component
+public class MemberCommand {
   
   MemberDao memberDao;
   
@@ -25,8 +23,9 @@ public class MemberCommand  {
           member.getEmail(), member.getTel(), member.getRegisteredDate()));
     }
   }
+  
   @RequestMapping("/member/add")
-  public void execute(Response response) throws Exception {
+  public void add(Response response) throws Exception {
     Member member = new Member();
     member.setName(response.requestString("이름?"));
     member.setEmail(response.requestString("이메일?"));
@@ -38,17 +37,21 @@ public class MemberCommand  {
     response.println("저장하였습니다.");
   }
   
-  @RequestMapping("/member/search")
-  public void search(Response response) throws Exception {
-    
-    String keyword = response.requestString("검색어?");
-    List<Member> members = memberDao.findByKeyword(keyword);
+  @RequestMapping("/member/detail")
+  public void detail(Response response) throws Exception {
+    int no = response.requestInt("번호?");
 
-    for (Member member : members) {
-      response.println(String.format("%3d, %-4s, %-20s, %-15s, %s", 
-          member.getNo(), member.getName(), 
-          member.getEmail(), member.getTel(), member.getRegisteredDate()));
+    Member member = memberDao.findByNo(no);
+    if (member == null) {
+      response.println("해당 번호의 회원이 없습니다.");
+      return;
     }
+    
+    response.println(String.format("이름: %s", member.getName()));
+    response.println(String.format("이메일: %s", member.getEmail()));
+    response.println(String.format("사진: %s", member.getPhoto()));
+    response.println(String.format("전화: %s", member.getTel()));
+    response.println(String.format("가입일: %s", member.getRegisteredDate()));
   }
   
   @RequestMapping("/member/update")
@@ -102,23 +105,6 @@ public class MemberCommand  {
     }
   }
   
-  @RequestMapping("/member/detail")
-  public void detail(Response response) throws Exception {
-    int no = response.requestInt("번호?");
-
-    Member member = memberDao.findByNo(no);
-    if (member == null) {
-      response.println("해당 번호의 회원이 없습니다.");
-      return;
-    }
-    
-    response.println(String.format("이름: %s", member.getName()));
-    response.println(String.format("이메일: %s", member.getEmail()));
-    response.println(String.format("사진: %s", member.getPhoto()));
-    response.println(String.format("전화: %s", member.getTel()));
-    response.println(String.format("가입일: %s", member.getRegisteredDate()));
-  }
-  
   @RequestMapping("/member/delete")
   public void delete(Response response) throws Exception {
     int no = response.requestInt("번호?");
@@ -130,4 +116,16 @@ public class MemberCommand  {
     response.println("삭제했습니다.");
   }
   
+  @RequestMapping("/member/search")
+  public void search(Response response) throws Exception {
+    
+    String keyword = response.requestString("검색어?");
+    List<Member> members = memberDao.findByKeyword(keyword);
+
+    for (Member member : members) {
+      response.println(String.format("%3d, %-4s, %-20s, %-15s, %s", 
+          member.getNo(), member.getName(), 
+          member.getEmail(), member.getTel(), member.getRegisteredDate()));
+    }
+  }
 }
