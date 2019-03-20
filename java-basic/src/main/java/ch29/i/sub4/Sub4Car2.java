@@ -1,24 +1,24 @@
-package ch29.h;
+package ch29.i.sub4;
 
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
-public class Car5 {
+import ch29.i.BlackBox;
+@Controller
+public class Sub4Car2 {
 	private String maker;
 	private String model;
 	private int cc;
 	private int valve;
 	private boolean auto;
 	private Date createdDate;
-	
-	@Autowired(required=true) 
-	@Qualifier("bb2")
-	private BlackBox blackBox;
+	@Autowired private BlackBox blackBox;
 
-	public Car5() {
-		System.out.println("car3 생성자");
+	public Sub4Car2() {
+		System.out.println("car 생성자");
 	}
 
 
