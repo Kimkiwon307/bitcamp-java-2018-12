@@ -1,0 +1,29 @@
+package ch30.e;
+
+// 지정된 객체의 메서드를 호출할 때,
+// => 메서드 호출 전이나 후에 어떤 작업을 수행하는 일을 한다.
+public class MyAdvice {
+	
+	//메서드를 호출하기 전에 미리 파리미터 값을 받을 수 있다.
+	// => advice에 파라ㅣㅁ터 값을 받을 변수를 선언하라
+	// => xml 설정에서 파라미터 값을 받겟다고 선언해얗나다.
+	public void doBefore(int p1, int p2, String p3) {
+		System.out.printf("%s.doBefore()\n", this.getClass().getName());
+		System.out.printf("  => %d %d %s\n",p1,p2,p3);
+	}
+
+	public void doAfter() {
+		System.out.printf("%s.doAfter()\n", this.getClass().getName());
+	}
+
+	public void doAfterReturning(Object rv) {
+		System.out.printf("%s.doAfterReturning()\n", this.getClass().getName());
+		System.out.printf("  => %d\n",rv);
+	}
+	
+	public void doAfterThrowing(Exception err) {
+		System.out.printf("%s.doAfterThrowing()\n", this.getClass().getName());
+		System.out.printf(" => %s\n", err.getMessage());
+	}
+	
+}
