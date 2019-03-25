@@ -1,4 +1,5 @@
 package com.eomcs.lms.handler;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -17,33 +18,44 @@ public class PhotoBoardCommand {
   }
 
   @RequestMapping("/photoboard/list")
-  public void list(Response response) {
+  public void list(ServletRequest request,ServletResponse response) {
+    PrintWriter out = response.getWriter();
     List<PhotoBoard> boards = photoBoardService.list(0, null);
     
+    out.println("<html><head><title>사진 목록</title></head>");
+    out.println("<body><h1>사진 목록</h1>");
+    out.println("<p><a href='/photoboard/form'>새글</a></p>");
+    out.println("<table border='1'>");
+    out.println("<tr> <th>번호</th> <th>제목</th> <th>만든날짜</th> <th>조회수</th><th>수업번호</th> </tr>");
+    
     for (PhotoBoard board : boards) {
-      response.println(
-          String.format("%3d, %-20s, %s, %d, %d", 
+      out.println(
+          String.format(
+              "<tr><td>%d</td> <td><a href='/photoboard/detail?no=%1$d'>%s</a></td> <td>%s</td> <td>%d</td><td>%d</td></tr>",  
             board.getNo(), 
             board.getTitle(), 
             board.getCreatedDate(), 
             board.getViewCount(),
             board.getLessonNo()));
     }
+    out.println("</table></body></html>");
   }
   
   @RequestMapping("/photoboard/add")
-  public void add(Response response) {
+  public void add(ServletRequest request,ServletResponse response) {
     try {
       PhotoBoard board = new PhotoBoard();
-      board.setTitle(response.requestString("사진 제목?"));
-      board.setLessonNo(response.requestInt("수업?"));
+      board.setTitle(request.getParameter("title"));
+//      board.setLessonNo(Integer.parseInt(request.getParameter("lessonNo")));
       
-      response.println("최소 한 개의 사진 파일을 등록해야 합니다.");
-      response.println("파일명 입력 없이 그냥 엔터를 치면 파일 추가를 마칩니다.");
+      PrintWriter out = response.getWriter();
+     
+      out.println("최소 한 개의 사진 파일을 등록해야 합니다.");
       
       ArrayList<PhotoFile> files = new ArrayList<>();
+     
       while (true) {
-        String filePath = response.requestString("사진 파일?");
+        out.println("사진 파일?");
         if (filePath.length() == 0) {
           if (files.size() == 0) {
             response.println("최소 한 개의 사진 파일을 등록해야 합니다.");
@@ -62,6 +74,13 @@ public class PhotoBoardCommand {
       
       photoBoardService.add(board);
       response.println("저장하였습니다.");
+      out.println("<html><head>"
+          + "<title>사진 등록</title>"
+          + "<meta http-equiv='Refresh' content='1;url=/photoboard/list'>"
+          + "</head>");
+      out.println("<body><h1>사진 등록</h1>");
+      out.println("<p>저장하였습니다.</p>");
+      out.println("</body></html>");
       
     } catch (Exception e) {
       e.printStackTrace();
@@ -70,7 +89,7 @@ public class PhotoBoardCommand {
   }
   
   @RequestMapping("/photoboard/detail")
-  public void detail(Response response) throws Exception {
+  public void detail(ServletResponse response) throws Exception {
     int no = response.requestInt("번호?");
     
     PhotoBoard board = photoBoardService.get(no);
@@ -95,7 +114,7 @@ public class PhotoBoardCommand {
   }
   
   @RequestMapping("/photoboard/update")
-  public void update(Response response) throws Exception {
+  public void update(ServletResponse response) throws Exception {
     
     try {
       PhotoBoard board = new PhotoBoard();
@@ -160,7 +179,7 @@ public class PhotoBoardCommand {
   }
 
   @RequestMapping("/photoboard/delete")
-  public void delete(Response response) throws Exception {
+  public void delete(ServletResponse response) throws Exception {
     try {
       int no = response.requestInt("번호?");
       if (photoBoardService.delete(no) == 0) {
@@ -175,7 +194,7 @@ public class PhotoBoardCommand {
   }
   
   @RequestMapping("/photoboard/search")
-  public void search(Response response) {
+  public void search(ServletResponse response) {
     int lessonNo = 0;
     try {
       lessonNo = response.requestInt("수업 번호?");
@@ -203,4 +222,37 @@ public class PhotoBoardCommand {
             board.getLessonNo()));
     }
   }
+  @RequestMapping("/photoboard/form")
+  public void form(ServletRequest request, ServletResponse response) throws Exception {
+    PrintWriter out = response.getWriter();
+    
+    out.println("<htm>");
+    out.println("<head><title>새 사진</title></head>");
+    out.println("<body>");
+    out.println("<h1>새 사진</h1>");
+    out.println("<form action='/photoboard/add'>");
+    out.println("<table border='1'>");
+    out.println("<tr>");
+    out.println("  <th>사진이름</th>");
+    out.println("  <td><textarea name='title' rows='1' cols='10'></textarea></td>");
+    out.println("</tr>");
+    out.println("<tr>");
+    out.println("  <th>만든날짜</th>");
+    out.println("  <td><textarea name='createdDate' rows='1' cols='10'></textarea></td>");
+    out.println("</tr>");
+    out.println("<tr>");
+    out.println("  <th>사진</th>");
+    out.println("  <td><textarea name='createdDate' rows='1' cols='10'></textarea></td>");
+    out.println("</tr>");
+    out.println("</table>");
+    out.println("<p>");
+    out.println("  <button type='submit'>등록</button>");
+    out.println("  <a href='/photoboard/list'>목록</a>");
+    out.println("</p>");
+    out.println("</form>");
+    out.println("</body>");
+    out.println("</html>");
+  }
+
+  
 }
