@@ -10,15 +10,15 @@
   웹 에플리케이션에 대한 설명을 이태그에 넣는다
 </description>
   <display-name>웹 에플리케이션에 대한 이름을 이태그에 넣는다</display-name>
- 
- <!-- 리스너 배치정보 -->
+
+  <!-- 리스너 배치정보 -->
   <listener>
     <listener-class>bitcamp.ex02.Listener01</listener-class>
   </listener>
   <listener>
     <listener-class>bitcamp.ex02.Listener02</listener-class>
   </listener>
-  
+
   <!-- 필터 배치정보 -->
   <filter>
     <filter-name>f1</filter-name>
@@ -55,6 +55,17 @@
     <servlet-class>bitcamp.ex01.Servlet03</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>bitcamp.ex04.Servlet05</servlet-name>
+    <servlet-class>bitcamp.ex04.Servlet05</servlet-class>
+    <!-- 멀티파트 데이터를 처리하려면 다음 태그를 선언해야 한다. -->
+    <multipart-config>
+      <max-file-size>10000000</max-file-size>
+    </multipart-config>
+  </servlet>
+
+
+
   <servlet-mapping>
     <servlet-name>Servlet01</servlet-name>
     <url-pattern>/ex01/s01</url-pattern>
@@ -69,6 +80,12 @@
     <servlet-name>Servlet03</servlet-name>
     <url-pattern>/ex01/s03</url-pattern>
   </servlet-mapping>
+  
+    <servlet-mapping>
+    <servlet-name>bitcamp.ex04.Servlet05</servlet-name>
+    <url-pattern>/ex04/s5</url-pattern>
+  </servlet-mapping>
+  
 
 
 </web-app>
