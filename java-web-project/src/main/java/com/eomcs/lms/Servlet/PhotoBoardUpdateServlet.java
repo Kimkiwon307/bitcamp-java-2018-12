@@ -46,7 +46,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
       files.add(file);
     }
     board.setFiles(files);
-    
+    response.setContentType("text/html;charset=UTF-8");
     PrintWriter out = response.getWriter();
     out.println("<html><head>"
         + "<title>사진 변경</title>"
