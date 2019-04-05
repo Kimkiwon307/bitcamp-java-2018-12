@@ -2,6 +2,7 @@ package com.eomcs.lms.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.UUID;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -13,48 +14,27 @@ import org.springframework.context.ApplicationContext;
 import com.eomcs.lms.domain.Member;
 import com.eomcs.lms.service.MemberService;
 
-@MultipartConfig(maxFileSize = 1024 * 1024 * 5) // 최대 5메가
+@MultipartConfig(maxFileSize = 1024 * 1024 * 5)
 @SuppressWarnings("serial")
 @WebServlet("/member/add")
-public class MemberAddServlet  extends HttpServlet{
-  
+public class MemberAddServlet extends HttpServlet {
   
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    MemberService memberService =
-        ((ApplicationContext) getServletContext().getAttribute("iocContainer")).getBean(MemberService.class);
-    Member member = new Member();
-    member.setName(request.getParameter("name"));
-    member.setEmail(request.getParameter("email"));
-    member.setPassword(request.getParameter("password"));
-    member.setTel(request.getParameter("tel"));
-    
-   Part photo = request.getPart("photo");
-   if(photo.getSize() > 0) {
-   String filename = UUID.randomUUID().toString();
-   String uploadDir = this.getServletContext().getRealPath("/upload/member");
-    photo.write(uploadDir + "/" + filename);
-    member.setPhoto(filename);
-   }
 
-    
-    memberService.add(member);
-    
-    response.sendRedirect("list");
-  }
- @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-   response.setContentType("text/html;charset=UTF-8");
-   PrintWriter out = response.getWriter();
+    response.setContentType("text/html;charset=UTF-8");
+    PrintWriter out = response.getWriter();
     
     out.println("<html>");
     out.println("<head><title>새 회원</title></head>");
     out.println("<body>");
+    
+    // 헤더를 출력한다.
+    request.getRequestDispatcher("/header").include(request, response);
+    
     out.println("<h1>새 회원</h1>");
-    out.println("<form action='add' method='post'enctype='multipart/form-data'>");
+    out.println("<form action='add' method='post' enctype='multipart/form-data'>");
     out.println("<table border='1'>");
     out.println("<tr>");
     out.println("  <th>이름</th>");
@@ -85,4 +65,36 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     out.println("</body>");
     out.println("</html>");
   }
+  
+  
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    ServletContext sc = this.getServletContext();
+    ApplicationContext iocContainer = 
+        (ApplicationContext) sc.getAttribute("iocContainer");
+    MemberService memberService = iocContainer.getBean(MemberService.class);
+    
+    Member member = new Member();
+    member.setName(request.getParameter("name"));
+    member.setEmail(request.getParameter("email"));
+    member.setPassword(request.getParameter("password"));
+    member.setTel(request.getParameter("tel"));
+    
+    Part photo = request.getPart("photo");
+    if (photo.getSize() > 0) {
+      String filename = UUID.randomUUID().toString();
+      String uploadDir = this.getServletContext().getRealPath(
+          "/upload/member");
+      photo.write(uploadDir + "/" + filename);
+      member.setPhoto(filename);
+    }
+
+    memberService.add(member);
+    
+    response.sendRedirect("list");
+  }
+  
+
 }

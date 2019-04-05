@@ -1,9 +1,11 @@
 package com.eomcs.lms.servlet;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -33,7 +35,10 @@ public class PhotoBoardUpdateServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     
-    PhotoBoardService photoBoardService = ((ApplicationContext) getServletContext().getAttribute("iocContainer")).getBean(PhotoBoardService.class);
+    ServletContext sc = this.getServletContext();
+    ApplicationContext iocContainer = 
+        (ApplicationContext) sc.getAttribute("iocContainer");
+    PhotoBoardService photoBoardService = iocContainer.getBean(PhotoBoardService.class);
 
     response.setContentType("text/html;charset=UTF-8");
 
@@ -64,6 +69,7 @@ public class PhotoBoardUpdateServlet extends HttpServlet {
       response.sendRedirect("list");
       return;
     }
+    
     PrintWriter out = response.getWriter();
     out.println("<html><head>" + "<title>사진 변경</title>"
         + "<meta http-equiv='Refresh' content='1;url=list'>" + "</head>");
