@@ -1,7 +1,6 @@
 package com.eomcs.lms.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,6 +29,8 @@ public class LessonDeleteServlet extends HttpServlet{
       response.sendRedirect("list");
       return;
     }
+    
+    // 오류 내용을 출력하는 JSP로 포워딩한다.
     request.setAttribute("error.title", "수업 삭제");
     request.setAttribute("error.content", "해당 번호의 수업이 없습니다.");
     
