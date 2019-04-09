@@ -37,7 +37,7 @@ public class PhotoBoardDetailServlet extends HttpServlet {
     List<Lesson> lessons = lessonService.list();
     request.setAttribute("board", board);
     request.setAttribute("lessons", lessons);
-    request.setAttribute("files", board.getFiles());
+    
     response.setContentType("text/html;charset=UTF-8");
     
     // JSP의 실행을 포함시킨다.

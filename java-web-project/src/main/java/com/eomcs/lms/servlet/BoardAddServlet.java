@@ -18,8 +18,9 @@ public class BoardAddServlet extends HttpServlet {
   protected void doGet(
       HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("/board/form.jsp").include(request, response);
+    System.out.println("3");
+    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
+    request.setAttribute("viewUrl", "/board/form.jsp");
   }
   
   @Override
@@ -27,6 +28,7 @@ public class BoardAddServlet extends HttpServlet {
       HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
     
+    System.out.println("4");
     // Spring IoC 컨테이너에서 BoardService 객체를 꺼낸다.
     ServletContext sc = this.getServletContext();
     ApplicationContext iocContainer = 
@@ -39,7 +41,8 @@ public class BoardAddServlet extends HttpServlet {
     
     boardService.add(board);
     
-    response.sendRedirect("list");
+    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
+    request.setAttribute("viewUrl", "redirect:list");
   }
 }
 
