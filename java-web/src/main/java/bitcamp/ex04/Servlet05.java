@@ -31,7 +31,8 @@ public class Servlet05 extends GenericServlet{
   public void service(ServletRequest req, ServletResponse res)
       throws ServletException, IOException {
       req.setCharacterEncoding("UTF-8");
-    HttpServletRequest httpReq = (HttpServletRequest) req;
+  
+      HttpServletRequest httpReq = (HttpServletRequest) req;
     
     
       res.setContentType("text/html;charset=UTF-8");

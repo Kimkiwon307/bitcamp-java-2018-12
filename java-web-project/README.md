@@ -1,304 +1,81 @@
-# eomcs-java-project-4.7-server
+# java-web-project
 
-트랜잭션이 필요한 이유!
+## src01 : 서블릿 적용 
+- 기존의 Command 객체를 Servlet으로 전환한다.
+- 파일 업로드 적용
+- 필터를 이용하여 입력 데이터의 한글 처리
+- 수업 사진 게시글을 등록/변경할 때 수업 목록에서 수업을 선택
 
-- 여러 개의 DB 변경 작업을 한 작업 단위로 묶는 방법
-- `commit`과 `rollback`의 의미
+## src02 : including/forwarding, refresh/redirect 적용
+- 메인 페이지를 출력하는 서블릿을 만들고 가운데 부분에 콘텐트를 출력하기 : servlet2 패지키
+  - com.eomcs.lms.servlet2.*
+- 헤더와 풋터를 출력하는 서블릿을 만들고 각 서블릿에 적용하기 : servlet3 패키지
+  - com.eomcs.lms.servlet3.*
+- 등록/변경/삭제 후에 출력 없이 바로 목록 페이지로 보내기 :
+  - servlet 패키지에 리다이렉트/리프래시 적용
+  - 실행 중 오류가 없으면 리다이렉트로 페이지를 이동한다.
+  - 실행 중 오류가 있으면 리프래시로 잠깐 오류 내용을 출력한 후 페이지 이동한다.
+  - BoardAddServlet, BoardUpdateServlet, BoardDeleteServlet
+  - LessonAddServlet, LessonUpdateServlet, LessonDeleteServlet
+  - MemberAddServlet, MemberUpdateServlet, MemberDeleteServlet
+  - PhotoBoardAddServlet, PhotoBoardUpdateServlet, PhotoBoardDeleteServlet
 
-## 프로젝트 - 수업관리 시스템  
+## src03 : ServletContext, HttpSession, ServletRequest 보관소 사용
+- InitServlet 에서 하던 일을 ContextLoaderListener에 맡긴다.
+- ContextLoaderListener(ServletContextListener의 구현체)
+    - 웹 애플리케이션이 시작될 때 스프링 IoC 컨테이너를 준비한다.
+    - ServletContext 보관소에 저장한다.
 
-### ver 4.7.0 - `수업 사진 게시판`을 만들라.
+## src04 : Cookie와 HttpSession을 활용하여 로그인 처리
+- LoginServlet 추가 
+    - 로그인 폼 출력과 로그인을 처리하는 역할
+    - Referer HTTP 요청 헤더를 이용하여 로그인 후 이전 페이지로 이동시킨다.
+    - 쿠키를 활용하여 로그인 폼에서 이메일을 자동 저장하게 한다.
+- LogoutServlet 추가 
+    - 세션을 무효화시킨다.
+- AuthFilter 추가 
+    - */add, */update, */delete URL 요청에 대해 로그인 되지 않았을 경우 로그인 폼으로 보낸다.
+- CharacterEncodingFilter 변경
+    - 인코딩 문자표를 소스 코드에 직접 입력하는 대신에 web.xml에서 읽어오기
+- HeaderServlet
+    - 비트캠프 로고와 로그인 정보를 출력하는 서블릿이다.
+- *AddServlet, *DetailServlet, *ListServlet
+    - 화면 상단에 로그인 정보 출력하도록 HeaderServlet을 include한다.
 
-- PhotoBoard.java
-    - 사진 게시물의 데이터 타입을 정의한다.
-- PhotoBoardDao.java
-    - 사진 게시물의 CRUD 관련 메서드를 정의한다.
-- PhotoBoardListCommand.java
-    - 사진 게시물의 목록을 출력한다.
-- PhotoBoardDetailCommand.java
-    - 특정 사진 게시물의 상세 정보를 출력한다.
-- PhotoBoardAddCommand.java
-    - 사진 게시물을 등록한다.
-- PhotoBoardUpdateCommand.java
-    - 사진 게시물을 변경한다. 
-- PhotoBoardDeleteCommand.java
-    - 사진 게시물을 삭제한다. 
-- DataLoaderListener.java
-    - `PhotoBoardDao` 객체를 생성하여 맵 객체에 보관한다.
-- App.java
-    - 사진 게시물 관련 `Command` 객체를 생성하여 커맨드 맵에 보관한다.
+## src05 : JSP 도입
+- /header.jsp 추가
+    - HeaderServlet을 /header.jsp 로 전환한다.
+- /board/list.jsp, /board/detail.jsp, /board/form.jsp 추가 
+    - BoardXxxServlet 클래스에 JSP 적용
+- /lesson/list.jsp, /lesson/detail.jsp, /lesson/form.jsp 추가 
+    - LessonXxxServlet 클래스에 JSP 적용
+- /member/list.jsp, /member/detail.jsp, /member/form.jsp 추가 
+    - MemberXxxServlet 클래스에 JSP 적용
+- /photoboard/list.jsp, /photoboard/detail.jsp, /photoboard/form.jsp 추가 
+    - PhotoBoardXxxServlet 클래스에 JSP 적용
 
-### ver 4.7.1 - `수업 사진 게시판`에 사진 파일을 첨부하는 기능을 추가하라.
+## src06 : JSP 액션 태그 적용 
+- /webapp/../*.jsp 변경
+    - JSP 액션 태그 적용
 
-- PhotoFile.java
-    - 사진 파일의 데이터 타입을 정의한다.
-- PhotoFileDao.java
-    - 사진 파일의 CRUD 관련 메서드를 정의한다.
-    - 단 사진 파일은 사진 게시물과 함께 사용되기에 변경,상세조회는 제외한다.
-- PhotoBoardDao.java
-    - 게시글을 등록한 후 자동 생성된 게시물 번호를 리턴하도록 코드를 변경한다.
-    - 이 게시글 등록 번호가 있어야만 사진 파일을 등록할 수 있다.
-- PhotoBoardAddCommand.java
-    - 사진 파일을 다룰 때 사용할 `PhotoFileDao` 객체를 생성자의 파라미터로 주입한다.
-    - 사진 게시물에 사진 파일을 첨부하는 기능을 추가한다.
-- PhotoBoardDetailCommand.java
-    - 사진 파일을 다룰 때 사용할 `PhotoFileDao` 객체를 생성자의 파라미터로 주입한다.
-    - 사진 게시물을 출력할 때 첨부된 사진 파일명도 함께 출력한다.
-- PhotoBoardUpdateCommand.java
-    - 사진 파일을 다룰 때 사용할 `PhotoFileDao` 객체를 생성자의 파라미터로 주입한다.
-    - 사진 게시물을 변경할 때 첨부할 사진을 변경한다.
-- PhotoBoardDeleteCommand.java
-    - 사진 파일을 다룰 때 사용할 `PhotoFileDao` 객체를 생성자의 파라미터로 주입한다.
-    - 사진 게시물을 삭제할 때 첨부한 사진 파일도 함께 삭제한다.
-- DataLoaderListener.java
-    - `PhotoFileDao` 객체를 생성하여 맵 객체에 보관한다.
-- App.java
-    - 사진 게시물 관련 `Command` 객체를 생성할 때 사진 데이터를 다룰 수 있는 `PhotoFileDao`객체를 주입한다.
+## src07 : EL 적용
+- /webapp/../*.jsp 변경
+    - EL 적용
 
-##### 실행 결과
+## src08 : JSTL 적용
+- /webapp/../*.jsp 변경
+    - JSTL 태그 적용
 
-`eomcs-java-project-server` 프로젝트의 `App` 클래스를 실행한다.
-```
-DataLoaderListener.contextInitialized() 실행!
-MariaDB에 연결했습니다.
-서버 실행!
-...
-```
-
-`eomcs-java-project-client`프로젝트의 `ClientApp`을 실행한다.
-```
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  7, okok2               , 2018-11-14, 0, 2
-  8, test1               , 2018-11-15, 0, 2
-
-명령> /photoboard/detail
-번호?
-7
-제목: okok2
-작성일: 2018-11-14
-조회수: 0
-수업: 2
-사진 파일:
-> aaa1.jpeg
-> aaa2.jpeg
-
-명령> /photoboard/update
-번호?
-7
-제목(okok2)?
-최종 발표
-사진 파일:
-> aaa1.jpeg
-> aaa2.jpeg
-
-사진은 일부만 변경할 수 없습니다.
-전체를 새로 등록해야 합니다.
-사진을 변경하시겠습니까?(y/N)
-y
-최소 한 개의 사진 파일을 등록해야 합니다.
-파일명 입력 없이 그냥 엔터를 치면 파일 추가를 마칩니다.
-사진 파일?
-
-최소 한 개의 사진 파일을 등록해야 합니다.
-사진 파일?
-ppt1.jpeg
-사진 파일?
-pp2.jpeg
-사진 파일?
-pp3.jpeg
-사진 파일?
-
-사진을 변경했습니다.
-
-명령> /photoboard/detail
-번호?
-7
-제목: 최종 발표
-작성일: 2018-11-14
-조회수: 0
-수업: 2
-사진 파일:
-> ppt1.jpeg
-> pp2.jpeg
-> pp3.jpeg
-
-명령> /photoboard/delete
-번호?
-99
-해당 사진을 찾을 수 없습니다.
-
-명령> /photoboard/delete
-번호?
-7
-사진을 삭제했습니다.
-
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  8, test1               , 2018-11-15, 0, 2
-
-명령> 
-```
-
-### ver 4.7.2 - 사진 게시물과 첨부 파일을 한 단위로 묶어 등록/변경/삭제를 수행하라.
-
-사진 게시물을 등록하는 경우 게시물 기본 정보는 `PHOTO` 테이블에 입력하고 사진 파일 정보는 `PHO_FILE` 테이블에 입력한다. 최소 한 개의 사진은 반드시 첨부해야 하기 때문에 `PHO_FILE` 테이블에 사진 파일을 입력하다가 실패하면 `PHOTO` 테이블에 입력한 게시물은 취소해야 한다.
-
-#### 트랜잭션 적용 전 실행 결과
-
-파일 등록에 실행하는 상황을 만들기 위해 파일 이름을 255자 이상으로 지정한다.
-
-```
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  8, test1               , 2018-11-15, 0, 2
-
-명령> /photoboard/add
-제목?
-ok
-수업?
-1
-최소 한 개의 사진 파일을 등록해야 합니다.
-파일명 입력 없이 그냥 엔터를 치면 파일 추가를 마칩니다.
-사진 파일?
-012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890
-사진 파일?
-
-java.sql.SQLDataException: (conn=11) Data too long for column 'PATH' at row 1 : (conn=11) Data too long for column 'PATH' at row 1
-```
-
-사진 파일을 입력하는데 실패했다. 그런데 사진 게시물 목록을 보면 게시물 기본 정보는 그대로 등록되었다.
-
-```
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  8, test1               , 2018-11-15, 0, 2
-  9, ok                  , 2018-11-15, 0, 1
-
-명령> 
-```
-
-이를 해결하는 방법은 `게시물 기본 정보 입력` 과 `사진 파일 정보 입력`을 한 작업(트랜잭션)으로 묶어 실행하는 것이다.  
-
-#### 두 입력 작업을 한 작업(트랜잭션)으로 묶는 방법
-
-- 같은 커넥션을 사용한다.
-- `insert`/`update`/`delete`을 실행하기 전에 커넥션을 커밋 모드를 수동으로 변경한다.
-- 작업 완료 후 DBMS에 `commit` 요청을 보낸다.
-- 작업 실패한다면 DBMS에 `rollback` 요청을 보낸다.
-
-#### 작업 파일
-
-- DataLoaderListener.java
-    - `Command` 객체에서 DB 커넥션 객체를 사용하야 하기 때문에 `Connection` 객체를 스태틱 필드로 전환한다.
-- PhotoBoardAddCommand.java
-    - 두 번의 `insert` 작업을 한 트랜잭션으로 묶어 처리한다.
-
-#### 트랜잭션 적용 후 실행 결과
-
-```
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  8, test1               , 2018-11-15, 0, 2
-  9, ok                  , 2018-11-15, 0, 1
-
-명령> /photoboard/add
-제목?
-ok2
-수업?
-1
-최소 한 개의 사진 파일을 등록해야 합니다.
-파일명 입력 없이 그냥 엔터를 치면 파일 추가를 마칩니다.
-사진 파일?
-012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890012345678900123456789001234567890
-사진 파일?
-
-java.sql.SQLDataException: (conn=12) Data too long for column 'PATH' at row 1 : (conn=12) Data too long for column 'PATH' at row 1
-```
-
-이전과 달리 트랜잭션을 적용한 후에는 사진 파일 등록에 실패했을 때 게시물 기본 정보 입력도 취소된 것을 확인할 수 있다.
-
-```
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  8, test1               , 2018-11-15, 0, 2
-  9, ok                  , 2018-11-15, 0, 1
-
-명령> 
-```
-
-물론 사진 파일이 정상적으로 입력된다면 게시물 기본 정보도 정상적으로 입력된다.
-
-```
-명령> /photoboard/add
-제목?
-okokok
-수업?
-1
-최소 한 개의 사진 파일을 등록해야 합니다.
-파일명 입력 없이 그냥 엔터를 치면 파일 추가를 마칩니다.
-사진 파일?
-test.jpeg
-사진 파일?
-
-사진을 저장했습니다.
-
-명령> /photoboard/list
-  1, 수업 오리엔테이션           , 2018-11-14, 0, 1
-  2, 1차 과제 발표            , 2018-11-14, 0, 1
-  3, null                , 2018-11-14, 0, 2
-  4, 과제 발표회              , 2018-11-14, 0, 3
-  6, 발표2                 , 2018-11-14, 0, 1
-  8, test1               , 2018-11-15, 0, 2
-  9, ok                  , 2018-11-15, 0, 1
- 11, okokok              , 2018-11-15, 0, 1
-
-명령> /photoboard/detail
-번호?
-11
-제목: okokok
-작성일: 2018-11-15
-조회수: 0
-수업: 1
-사진 파일:
-> test.jpeg
-
-```
-
-#### 사진 게시물 변경과 삭제에 대해서도 트랜잭션을 적용한다.
-
-- PhotoBoardUpdateCommand.java
-    - `update`, `insert` 작업을 한 트랜잭션으로 묶어 처리한다.
-- PhotoBoardDeleteCommand.java
-    - 두 번의 `delete` 작업을 한 트랜잭션으로 묶어 처리한다.
-
-## 실습 소스
-
-- src/main/java/com/eomcs/lms/handler/PhotoBoardAddCommand.java 변경
-- src/main/java/com/eomcs/lms/handler/PhotoBoardUpdateCommand.java 변경
-- src/main/java/com/eomcs/lms/handler/PhotoBoardDeleteCommand.java 변경
-- src/main/java/com/eomcs/lms/DataLoaderListener.java 변경
+## src09 : 프론트 컨트롤러 적용
+- DispatcherServlet 추가
+    - 프론트 컨트롤러 역할을 수행하는 서블릿
+- *Servlet 클래스 변경
+    - JSP 인클루드와 리다이렉트 코드를 프론트 컨틀롤러에게 위임
+- LoginServlet 쿠키 처리
+    - 프론트 컨트롤러에서 쿠키를 처리하도록 코드 변경
+- /member/detail.jsp, /photoboard/detail.jsp
+    - /image, /upload 폴더를 상대 경로 대신 컨텍스트 루트 절대 경로로 지정
+- /header.jsp 변경
+    - 로그인, 로그아웃 경로 수정
+- AuthFilter 변경
+    - /app/* 에 대해서 적용
