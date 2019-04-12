@@ -55,7 +55,7 @@
       <param-value>UTF-8</param-value>
     </init-param>
   </filter>
-  
+
   <filter>
     <filter-name>ex06 Filter03</filter-name>
     <filter-class>bitcamp.ex06.Filter03</filter-class>
@@ -170,9 +170,26 @@
     <url-pattern>/ex06/s4</url-pattern>
   </servlet-mapping>
 
-<session-config>
-  <session-timeout>1</session-timeout>
-</session-config>
+  <!-- 외부라이브러리 배 -->
+  <servlet>
+    <servlet-name>HelloServlet</servlet-name>
+    <servlet-class>bitcamp.HelloServlet</servlet-class>
+
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>HelloServlet</servlet-name>
+    <url-pattern>/lib/hello</url-pattern>
+  </servlet-mapping>
+
+
+
+
+
+
+
+  <session-config>
+    <session-timeout>1</session-timeout>
+  </session-config>
 
 
 
