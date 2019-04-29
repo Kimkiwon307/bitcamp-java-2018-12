@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex06</title>
+<style>
+table{
+width: 600px;
+
+}
+</style>
+</head>
+<body>
+  <h1>이벤트 - 이벤트 전파 기능을 이용하기</h1>
+  <table border="1">
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>등록일</th>
+      <th>조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><a href="#">제목입니다</a></td>
+        <td>홍길동</td>
+        <td>2019-04-28</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><a href="#">제목입니다2</a></td>
+        <td>임꺽정</td>
+        <td>2019-04-28</td>
+        <td>100</td>
+      </tr>
+      <tr>
+        <td>31</td>
+        <td><a href="#">제목입니다3</a></td>
+        <td>유관순</td>
+        <td>2019-04-28</td>
+        <td>100</td>
+      </tr>
+
+
+    </tbody>
+  </table>
+  <div id="d1">
+    d1
+    <div id="d2">
+      d2
+      <button id="btn1">버튼1</button>
+      <button id="btn2">버튼2</button>
+    </div>
+  </div>
+  <script>
+	"use strict"
+	
+var el = 	document.querySelectorAll("tbody a");
+	for(var e of el){
+		e.addEventlistener("click",function(e){
+			window.alert("졸려요")
+		});
+		
+	}
+		</script>
+</body>
+</html>
+
+
+
+
+
