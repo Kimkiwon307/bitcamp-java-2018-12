@@ -10,15 +10,14 @@ import com.eomcs.lms.service.LessonService;
 
 @Controller("/lesson/list")
 public class LessonListController implements PageController {
-
+  
   @Autowired LessonService lessonService;
-  
+
   @Override
-public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     List<Lesson> lessons = lessonService.list();
+    
     request.setAttribute("list", lessons);
-  
     return "/lesson/list.jsp";
   }
 }

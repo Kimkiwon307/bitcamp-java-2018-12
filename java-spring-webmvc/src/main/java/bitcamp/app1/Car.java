@@ -3,20 +3,18 @@ package bitcamp.app1;
 import java.util.Date;
 
 public class Car {
-
   protected String model;
-  protected  String maker;
+  protected String maker;
   protected boolean auto;
-  protected int cc;
+  protected int capacity;
   protected Date createdDate;
   protected Engine engine;
   
   @Override
   public String toString() {
-    return "Car [model=" + model + ", maker=" + maker + ", auto=" + auto + ", cc=" + cc
+    return "Car [model=" + model + ", maker=" + maker + ", auto=" + auto + ", capacity=" + capacity
         + ", createdDate=" + createdDate + ", engine=" + engine + "]";
   }
-  
   public String getModel() {
     return model;
   }
@@ -35,25 +33,24 @@ public class Car {
   public void setAuto(boolean auto) {
     this.auto = auto;
   }
-  public int getCc() {
-    return cc;
-  }
-  public void setCc(int cc) {
-    this.cc = cc;
-  }
   public Date getCreatedDate() {
     return createdDate;
   }
   public void setCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
   }
-
+  public int getCapacity() {
+    return capacity;
+  }
+  public void setCapacity(int capacity) {
+    this.capacity = capacity;
+  }
   public Engine getEngine() {
     return engine;
   }
-
   public void setEngine(Engine engine) {
     this.engine = engine;
-  } 
-
+  }
+  
+  
 }

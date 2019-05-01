@@ -11,15 +11,14 @@ import com.eomcs.lms.service.PhotoBoardService;
 public class PhotoBoardListController implements PageController {
 
   @Autowired PhotoBoardService photoBoardService;
-
+  
   @Override
-  public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     List<PhotoBoard> boards = photoBoardService.list(0, null);
 
     request.setAttribute("list", boards);
-
+    
     return "/photoboard/list.jsp";
   }
 }

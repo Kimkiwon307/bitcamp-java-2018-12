@@ -7,17 +7,17 @@ import com.eomcs.lms.service.MemberService;
 
 @Controller("/member/delete")
 public class MemberDeleteController implements PageController {
-
+  
   @Autowired MemberService memberService;
- @Override
-public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     
     int no = Integer.parseInt(request.getParameter("no"));
 
-    if (memberService.delete(no) == 0) {
-      throw new Exception("해당 번호의 사람이 없습니다");
-    } 
-
+    if (memberService.delete(no) == 0) 
+      throw new Exception("해당 번호의 회원이 없습니다.");
+    
     return "redirect:list";
   }
 }

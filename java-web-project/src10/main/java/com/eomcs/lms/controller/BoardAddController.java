@@ -9,12 +9,14 @@ import com.eomcs.lms.service.BoardService;
 @Controller("/board/add")
 public class BoardAddController implements PageController {
   
-@Autowired BoardService boardService;
+  @Autowired BoardService boardService;
+  
   @Override
-  public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if(request.getMethod().equals("GET")) {
-        return "/board/form.jsp";
-      }       
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    
+    if (request.getMethod().equals("GET")) {
+      return "/board/form.jsp";
+    }
     
     Board board = new Board();
     board.setContents(request.getParameter("contents")
@@ -22,7 +24,6 @@ public class BoardAddController implements PageController {
     
     boardService.add(board);
     
-    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
     return "redirect:list";
   }
 }

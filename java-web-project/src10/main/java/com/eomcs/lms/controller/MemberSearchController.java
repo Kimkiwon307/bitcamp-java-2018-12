@@ -9,19 +9,18 @@ import com.eomcs.lms.service.MemberService;
 
 @Controller("/member/search")
 public class MemberSearchController implements PageController {
-
+  
   @Autowired MemberService memberService;
   
-@Override
-public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    
+  @Override
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+   
     String keyword = request.getParameter("keyword");
     
     List<Member> members = memberService.list(keyword);
     request.setAttribute("list", members);
     
-    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
-  return "/member/search.jsp";
+    return "/member/search.jsp";
   }
   
 }

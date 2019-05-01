@@ -12,15 +12,16 @@ import com.eomcs.lms.service.LessonService;
 
 @Controller
 public class LessonController {
-
+  
   @Autowired LessonService lessonService;
 
   @RequestMapping("/lesson/add")
   public String add(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    if(request.getMethod().equals("GET")) {
+    
+    if (request.getMethod().equals("GET")) {
       return "/lesson/form.jsp";
     }
-
+    
     Lesson lesson = new Lesson();
     lesson.setTitle(request.getParameter("title"));
     lesson.setContents(request.getParameter("contents"));
@@ -31,19 +32,20 @@ public class LessonController {
 
     lessonService.add(lesson);
 
-    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
     return "redirect:list";
   }
+  
   @RequestMapping("/lesson/delete")
   public String delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     int no = Integer.parseInt(request.getParameter("no"));
 
-    if (lessonService.delete(no) == 0) {
-      throw new Exception("해당 번호의 게시물이 없습니다");
-    }
+    if (lessonService.delete(no) == 0) 
+      throw new Exception("해당 번호의 수업이 없습니다.");
+      
     return "redirect:list";
   }
+  
   @RequestMapping("/lesson/detail")
   public String detail(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -51,17 +53,18 @@ public class LessonController {
 
     Lesson lesson = lessonService.get(no);
     request.setAttribute("lesson", lesson);
-
+    
     return "/lesson/detail.jsp";
-  }  
+  }
+
   @RequestMapping("/lesson/list")
   public String list(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
     List<Lesson> lessons = lessonService.list();
+    
     request.setAttribute("list", lessons);
-
     return "/lesson/list.jsp";
   }
+  
   @RequestMapping("/lesson/update")
   public String update(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
@@ -74,10 +77,9 @@ public class LessonController {
     lesson.setTotalHours(Integer.parseInt(request.getParameter("totalHours")));
     lesson.setDayHours(Integer.parseInt(request.getParameter("dayHours")));
 
-    if (lessonService.update(lesson) == 0) 
-      throw new Exception("aa");
+    if (lessonService.update(lesson) == 0)
+      throw new Exception("해당 번호의 수업이 없습니다.");
+    
     return "redirect:list";
   }
-
-
 }

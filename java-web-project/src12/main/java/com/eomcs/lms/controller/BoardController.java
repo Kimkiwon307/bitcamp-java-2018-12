@@ -11,12 +11,14 @@ import com.eomcs.lms.service.BoardService;
 @Controller
 public class BoardController {
   
-@Autowired BoardService boardService;
+  @Autowired BoardService boardService;
+  
   @RequestMapping("/board/add")
   public String add(HttpServletRequest request, HttpServletResponse response) throws Exception {
-      if(request.getMethod().equals("GET")) {
-        return "/board/form.jsp";
-      }       
+    
+    if (request.getMethod().equals("GET")) {
+      return "/board/form.jsp";
+    }
     
     Board board = new Board();
     board.setContents(request.getParameter("contents")
@@ -24,34 +26,34 @@ public class BoardController {
     
     boardService.add(board);
     
-    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
     return "redirect:list";
   }
+  
   @RequestMapping("/board/delete")
   public String delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+  
     int no = Integer.parseInt(request.getParameter("no"));
 
-    if (boardService.delete(no)== 0) {
-      throw new Exception("해당 번호의 게시물이 없습니다");
-
-    }
+    if (boardService.delete(no) == 0) 
+      throw new Exception("해당 번호의 게시물이 없습니다.");
+    
     return "redirect:list";
   }
+  
   @RequestMapping("/board/detail")
   public String detail(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
     int no = Integer.parseInt(request.getParameter("no"));
-
+    
     Board board = boardService.get(no);
     request.setAttribute("board", board);
-
+    
     // 뷰 컴포넌트의 URL을 프론트 컨트롤러에게 리턴한다.
     return "/board/detail.jsp";
   }
-
+  
   @RequestMapping("/board/list")
-  public String list(HttpServletRequest request,
+  public String list(
+      HttpServletRequest request, 
       HttpServletResponse response) throws Exception {
     
     List<Board> boards = boardService.list();
@@ -60,19 +62,18 @@ public class BoardController {
     // 뷰 컴포넌트의 URL을 이 메서드를 호출한 프론트 컨트롤러에게 리턴한다.
     return "/board/list.jsp";
   }
+  
   @RequestMapping("/board/update")
-  public String update(HttpServletRequest request, HttpServletResponse response)
-  throws Exception{
-
+  public String update(HttpServletRequest request, HttpServletResponse response) throws Exception {
     Board board = new Board();
     board.setNo(Integer.parseInt(request.getParameter("no")));
     board.setContents(request.getParameter("contents"));
-
-    if (boardService.update(board) == 0)
-      throw new Exception("aa");
-      return "redirect:list";
+    
+    if (boardService.update(board) == 0) 
+      throw new Exception("해당 번호의 게시물이 없습니다.");
+      
+    return "redirect:list";
   }
-  
 }
 
 

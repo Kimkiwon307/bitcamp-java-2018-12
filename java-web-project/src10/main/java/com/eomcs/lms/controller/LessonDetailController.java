@@ -8,11 +8,11 @@ import com.eomcs.lms.service.LessonService;
 
 @Controller("/lesson/detail")
 public class LessonDetailController implements PageController {
-
-  @Autowired LessonService lessonService;
   
+  @Autowired LessonService lessonService;
+
   @Override
-public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     int no = Integer.parseInt(request.getParameter("no"));
 

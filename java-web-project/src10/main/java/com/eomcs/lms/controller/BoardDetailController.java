@@ -10,15 +10,14 @@ import com.eomcs.lms.service.BoardService;
 public class BoardDetailController implements PageController {
 
   @Autowired BoardService boardService;
-
+  
   @Override
-  public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     int no = Integer.parseInt(request.getParameter("no"));
-
+    
     Board board = boardService.get(no);
     request.setAttribute("board", board);
-
+    
     // 뷰 컴포넌트의 URL을 프론트 컨트롤러에게 리턴한다.
     return "/board/detail.jsp";
   }

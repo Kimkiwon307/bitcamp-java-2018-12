@@ -8,21 +8,21 @@ import com.eomcs.lms.service.BoardService;
 
 @Controller("/board/update")
 public class BoardUpdateController implements PageController {
-
+  
   @Autowired BoardService boardService;
+  
   @Override
-  public String excute(HttpServletRequest request, HttpServletResponse response)
-  throws Exception{
-
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     Board board = new Board();
     board.setNo(Integer.parseInt(request.getParameter("no")));
     board.setContents(request.getParameter("contents"));
-
-    if (boardService.update(board) == 0)
-      throw new Exception("aa");
-      return "redirect:list";
+    
+    if (boardService.update(board) == 0) 
+      throw new Exception("해당 번호의 게시물이 없습니다.");
+      
+    return "redirect:list";
   }
- }
+}
 
 
 

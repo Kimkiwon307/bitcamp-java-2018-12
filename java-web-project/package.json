@@ -1,0 +1,16 @@
+{
+  "name": "java-web-project",
+  "version": "1.0.0",
+  "description": "## src01 : 서블릿 적용  - 기존의 Command 객체를 Servlet으로 전환한다. - 파일 업로드 적용 - 필터를 이용하여 입력 데이터의 한글 처리 - 수업 사진 게시글을 등록/변경할 때 수업 목록에서 수업을 선택",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.0",
+    "popper.js": "^1.15.0"
+  }
+}

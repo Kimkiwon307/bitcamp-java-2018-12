@@ -8,17 +8,17 @@ import com.eomcs.lms.service.LessonService;
 
 @Controller("/lesson/delete")
 public class LessonDeleteController implements PageController {
-
+  
   @Autowired LessonService lessonService;
 
   @Override
-public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     int no = Integer.parseInt(request.getParameter("no"));
 
-    if (lessonService.delete(no) == 0) {
-      throw new Exception("해당 번호의 게시물이 없습니다");
-    }
+    if (lessonService.delete(no) == 0) 
+      throw new Exception("해당 번호의 수업이 없습니다.");
+      
     return "redirect:list";
   }
 }

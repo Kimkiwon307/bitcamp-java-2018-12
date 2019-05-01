@@ -1,15 +1,9 @@
 package com.eomcs.lms.controller;
 
-import java.io.IOException;
 import java.util.List;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import com.eomcs.lms.domain.Lesson;
 import com.eomcs.lms.domain.PhotoBoard;
@@ -19,11 +13,11 @@ import com.eomcs.lms.service.PhotoBoardService;
 @Controller("/photoboard/detail")
 public class PhotoBoardDetailController implements PageController {
 
-  @Autowired PhotoBoardService photoBoardService;
   @Autowired LessonService lessonService;
+  @Autowired PhotoBoardService photoBoardService;
+  
   @Override
-  public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
     int no = Integer.parseInt(request.getParameter("no"));
 
     PhotoBoard board = photoBoardService.get(no);
@@ -31,6 +25,6 @@ public class PhotoBoardDetailController implements PageController {
     request.setAttribute("board", board);
     request.setAttribute("lessons", lessons);
     
-    return "/photoboard/detail.jsp";
+    return  "/photoboard/detail.jsp";
   }
 }

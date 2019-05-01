@@ -11,8 +11,9 @@ import com.eomcs.lms.service.PhotoBoardService;
 public class PhotoBoardSearchController implements PageController {
 
   @Autowired PhotoBoardService photoBoardService;
+  
   @Override
-  public String excute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+  public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     int lessonNo = 0;
     try {
@@ -31,7 +32,6 @@ public class PhotoBoardSearchController implements PageController {
     List<PhotoBoard> boards = photoBoardService.list(lessonNo, searchWord);
     request.setAttribute("list", boards);
     
-    // 뷰 컴포넌트의 URL을 ServletRequest 보관소에 저장한다.
     return "/photoboard/list.jsp";
   }
 
