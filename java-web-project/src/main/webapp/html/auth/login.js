@@ -1,8 +1,7 @@
-
-if(window.localStorage.getItem('email')){
-	document.querySelector('#email').value = localStorage.email
+if (window.localStorage.getItem('email')) {
+  //document.querySelector('#email').value = localStorage.getItem('email')
+  document.querySelector('#email').value = localStorage.email
 }
-
 
 document.querySelector('#login-btn').onclick = () => {
   var xhr = new XMLHttpRequest()
@@ -26,16 +25,17 @@ document.querySelector('#login-btn').onclick = () => {
   var password = document.querySelector('#password').value;
   
   if (document.querySelector('#saveEmail:checked') != null) {
-    // 쿠키에 email을 저장한다.
-    window.localStorage.setItem("email", email)
-    
+    // 웹브라우저의 로컬 스토리지에 이메일을 저장한다.
+    //window.localStorage.setItem("email", email);
+    window.localStorage.email = email;
   } else {
-	  window.localStorage.removeItem("email")
+    window.localStorage.removeItem("email");
   }
   
   var qs = 'email=' + email + '&password=' + password;
   xhr.send(qs);
 };
+
 
 
 

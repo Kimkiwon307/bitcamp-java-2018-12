@@ -26,7 +26,7 @@ document.querySelector('#add-btn').onclick = () => {
       location.href = "index.html"
         
     } else {
-      alert('등록 실패입니다!')
+      alert('등록 실패입니다!\n' + data.message)
     }
   };
   xhr.open('POST', '../../app/json/board/add', true)
@@ -49,7 +49,7 @@ document.querySelector('#delete-btn').onclick = () => {
       location.href = "index.html"
         
     } else {
-      alert('삭제 실패입니다!')
+      alert('삭제 실패입니다!\n' + data.message)
     }
   };
   var no = document.querySelector('#no').value;
@@ -75,9 +75,13 @@ document.querySelector('#update-btn').onclick = () => {
   xhr.open('POST', '../../app/json/board/update', true)
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   
+  var no = document.querySelector('#no').value;
   var contents = document.querySelector('#contents').value;
   
-  xhr.send("contents=" + encodeURIComponent(contents));
+  var qs = 'contents=' + encodeURIComponent(contents) +
+    '&no=' + no;
+  
+  xhr.send(qs);
 };
 
 function loadData(no) {
