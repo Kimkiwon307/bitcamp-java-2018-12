@@ -24,8 +24,7 @@
 </c:if>
 
 <p>search 라는 이름으로 검색 엔진을 지정하세요!<br>
-유효한 엔진은 'naver', 'daum' 입니다.
-실행url  http://localhost:8080/java-web/jstl/ex11.jsp?search=naver</p>
+유효한 엔진은 'naver', 'daum' 입니다.</p>
 </body>
 </html>
 

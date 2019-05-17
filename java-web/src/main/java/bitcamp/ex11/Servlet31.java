@@ -1,4 +1,4 @@
-//  세션의 무효화 시키기
+// 세션(session) 무효화시키기
 package bitcamp.ex11;
 
 import java.io.IOException;
@@ -12,22 +12,20 @@ import javax.servlet.http.HttpSession;
 
 @WebServlet("/ex11/s31")
 @SuppressWarnings("serial")
-public class Servlet31 extends HttpServlet{
-
-
+public class Servlet31 extends HttpServlet {
+  
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
+  protected void doGet(
+      HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
-
+    
     HttpSession session = request.getSession();
-
-    // 세션의 유효기간
-
-    session.setMaxInactiveInterval(10); //초
     session.setAttribute("v1", "aaa");
     
-    response.setContentType("text/html;charset=UTF-8");
+    response.setContentType("text/plain;charset=UTF-8");
     PrintWriter out = response.getWriter();
-    out.println("ex11/s31 실행");
+    out.println("/ex11/s31 실행함!");
   }
 }
+
+

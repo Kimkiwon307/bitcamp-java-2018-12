@@ -24,6 +24,10 @@ dependencies {
     // MariaDB JDBC Driver
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.4.0'
     
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.1.5.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-config
+compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.1.5.RELEASE'
     
     // Spring IoC 컨테이너 라이브러리
     // => Spring WebMVC 라이브러리를 추가하면 의존 라이브러리로 자동 추가된다.

@@ -10,22 +10,30 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 
 @WebServlet("/ex03/s3")
-public class Servlet03 extends GenericServlet{
-
+public class Servlet03 extends GenericServlet {
+  
   private static final long serialVersionUID = 1L;
 
   @Override
   public void service(ServletRequest req, ServletResponse res)
       throws ServletException, IOException {
-  
     
-     // 반드시 출력 스트림을 얻기 전에 설정 해야한다
-    res.setContentType("text/html;charset=UTF-8");
-    PrintWriter out =res.getWriter();
+    // HTML 출력할 때 MIME 타입에 HTML을 지정하지 않으면 
+    // 일반 텍스트 그래도 출력한다.
+    res.setContentType("text/html;charset=UTF-8"); // UTF-16 ==> UTF-8
+    PrintWriter out = res.getWriter();
     
+    out.println("<!DOCTYPE html>");
     out.println("<html>");
-    out.println("<head><title>롤하면..</title></head>");
-    out.println("<body> <h1>질텐데..</h1></body>");
+    out.println("<head><title>servlet03</title></head>");
+    out.println("<body><h1>안녕하세요</h1></body>");
     out.println("</html>");
   }
 }
+
+
+
+
+
+
+

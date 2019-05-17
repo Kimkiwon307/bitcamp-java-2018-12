@@ -1,10 +1,8 @@
-// 쿠키 읽기 
+// 쿠키(cookie) 읽기 - 사용 범위가 지정된 쿠키 읽기
 package bitcamp.ex10;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -14,20 +12,30 @@ import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/ex10/a/b/c/s23")
 @SuppressWarnings("serial")
-public class Servlet23 extends HttpServlet{
-
+public class Servlet23 extends HttpServlet {
+  
   @Override
-  protected void service(HttpServletRequest request, HttpServletResponse response)
+  protected void service(
+      HttpServletRequest request, 
+      HttpServletResponse response)
       throws ServletException, IOException {
-
-    Cookie[] c = request.getCookies();
+    
+    // 테스트 방법:
+    // => http://localhost:8080/java-web/ex10/a/b/c/s23
+    //
+    
+    Cookie[] cookies = request.getCookies();
+    
     response.setContentType("text/plain;charset=UTF-8");
     PrintWriter out = response.getWriter();
 
-    if(c != null) {
-     for(Cookie cc : c) {
-       out.printf("%s=%s\n", cc.getName(),cc.getValue());
-     }
-   }
+    if (cookies != null) {
+      for (Cookie c : cookies) {
+        out.printf("%s=%s\n", c.getName(), c.getValue());
+      }
+    }
+    
   }
 }
+
+
